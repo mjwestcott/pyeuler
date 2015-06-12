@@ -62,7 +62,7 @@ def main(args):
 
     solutions = (options.solutions_file and
         dict(parse_solutions(open(options.solutions_file))))
-    tosolve = map(int, args0)
+    tosolve = list(map(int, args0))
     problem_functions = dict((int(re.match("problem(\d+)$", s).group(1)), fun)
         for (s, fun) in inspect.getmembers(problems) if s.startswith("problem"))
 
