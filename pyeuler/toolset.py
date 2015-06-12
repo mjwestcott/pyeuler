@@ -4,6 +4,7 @@ from itertools import islice, repeat, groupby
 from itertools import count, takewhile, tee
 from itertools import chain, starmap, cycle, dropwhile
 from itertools import combinations, permutations, product as cartesian_product
+from functools import reduce
 from math import sqrt, log, log10, ceil
 
 def take(n, iterable):
