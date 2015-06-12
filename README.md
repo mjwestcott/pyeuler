@@ -10,10 +10,10 @@ Some people have expressed their concerns about making the solutions of the Eule
 
 If "functional programming" sounds unfamiliar to you, read these pages and discover this exciting paradigm:
 
-http://en.wikipedia.org/wiki/Functional_programming
-http://linuxgazette.net/109/pramode.html
-http://www.ibm.com/developerworks/library/l-prog.html
-http://www.amk.ca/python/writing/functional
+- http://en.wikipedia.org/wiki/Functional_programming
+- http://linuxgazette.net/109/pramode.html
+- http://www.ibm.com/developerworks/library/l-prog.html
+- http://www.amk.ca/python/writing/functional
 
 Python is not a purely functional language, so some (many, I am afraid) of these solutions won't be as pythonic as one would like. But this is the challenge: solve the Euler Project problems using pre FP, state variables are absolutely forbidden!
 
