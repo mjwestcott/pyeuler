@@ -15,32 +15,32 @@ def index(n, iterable):
     "Returns the nth item"
     return next(islice(iterable, n, n+1))
 
-def first(iterable):
-    """Take first element in the iterable"""
-    return next(iterable)
+def first(iterator):
+    """Take first element in the iterator"""
+    return next(iterator)
 
 def last(iterable):
     """Take last element in the iterable"""
     return reduce(lambda x, y: y, iterable)
 
 def take_every(n, iterable):
-    """Take an element from iterator every n elements"""
+    """Take an element from iterable every n elements"""
     return islice(iterable, 0, None, n)
 
 def drop(n, iterable):
     """Drop n elements from iterable and return the rest"""
     return islice(iterable, n, None)
 
-def ilen(it):
-    """Return length exhausing an iterator"""
-    return sum(1 for _ in it)
+def ilen(iterable):
+    """Return length (exhausts an iterator)"""
+    return sum(1 for _ in iterable)
 
 def product(nums):
     """Product of nums"""
     return reduce(operator.mul, nums, 1)
 
 def irange(start_or_end, optional_end=None):
-    """Return iterable that counts from start to end (both included)."""
+    """Return iterator that counts from start to end (both included)."""
     if optional_end is None:
         start, end = 0, start_or_end
     else:
@@ -51,9 +51,9 @@ def flatten(lstlsts):
     """Flatten a list of lists"""
     return (b for a in lstlsts for b in a)
 
-def compact(it):
-    """Filter None values from iterator"""
-    return filter(bool, it)
+def compact(iterable):
+    """Filter None values from an iterable"""
+    return filter(bool, iterable)
 
 def groups(iterable, n, step):
     """Make groups of 'n' elements from the iterable advancing
