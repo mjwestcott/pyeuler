@@ -264,6 +264,7 @@ def get_cardinal_name(num):
 
 def is_perfect(num):
     """Return -1 if num is deficient, 0 if perfect, 1 if abundant"""
+    cmp = lambda x, y: (1 if x > y else 0 if x == y else -1)
     return cmp(sum(proper_divisors(num)), num)
 
 def number_of_digits(num, base=10):
