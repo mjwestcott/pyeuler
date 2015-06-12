@@ -127,7 +127,7 @@ def problem18():
         """Return groups of "columns" numbers, following all possible ways."""
         for moves in cartesian_product([0, +1], repeat=len(rows)-1):
             indexes = ireduce(operator.add, moves, 0)
-            yield (row[index] for (row, index) in izip(rows, indexes))
+            yield (row[index] for (row, index) in zip(rows, indexes))
     rows = [map(int, line.split()) for line in data.problem18.strip().splitlines()]
     return max(sum(numbers) for numbers in get_numbers(rows))
 

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import operator
 from itertools import islice, repeat, groupby
-from itertools import count, imap, takewhile, tee, izip
+from itertools import count, imap, takewhile, tee
 from itertools import chain, starmap, cycle, dropwhile
 from itertools import combinations, permutations, product as cartesian_product
 from math import sqrt, log, log10, ceil
@@ -58,7 +58,7 @@ def groups(iterable, n, step):
     """Make groups of 'n' elements from the iterable advancing
     'step' elements on each iteration"""
     itlist = tee(iterable, n)
-    onestepit = izip(*(starmap(drop, enumerate(itlist))))
+    onestepit = zip(*(starmap(drop, enumerate(itlist))))
     return take_every(step, onestepit)
 
 def compose(f, g):
