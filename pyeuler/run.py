@@ -68,7 +68,7 @@ def main(args):
 
     itime = time.time()
     statuses = [run_problem(num, fun, solutions) for (num, fun) in
-        sorted(problem_functions.iteritems()) if not tosolve or num in tosolve]
+        sorted(problem_functions.items()) if not tosolve or num in tosolve]
     elapsed = time.time() - itime
     ps = "problem" + ("" if len(statuses) == 1 else "s")
     print("--- %d %s run (%d failed) in %0.3f seconds" %
