@@ -153,7 +153,7 @@ def problem20():
 def problem21():
     """Evaluate the sum of all the amicable numbers under 10000."""
     sums = dict((n, sum(proper_divisors(n))) for n in range(1, 10000))
-    return sum(a for (a, b) in sums.iteritems() if a != b and sums.get(b, 0) == a)
+    return sum(a for (a, b) in sums.items() if a != b and sums.get(b, 0) == a)
 
 def problem22():
     """What is the total of all the name scores in the file?"""
