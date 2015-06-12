@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import operator
-from itertools import ifilter, islice, repeat, groupby
+from itertools import islice, repeat, groupby
 from itertools import count, imap, takewhile, tee, izip
 from itertools import chain, starmap, cycle, dropwhile
 from itertools import combinations, permutations, product as cartesian_product
@@ -52,7 +52,7 @@ def flatten(lstlsts):
 
 def compact(it):
     """Filter None values from iterator"""
-    return ifilter(bool, it)
+    return filter(bool, it)
 
 def groups(iterable, n, step):
     """Make groups of 'n' elements from the iterable advancing
@@ -169,7 +169,7 @@ def is_prime(n):
 def get_primes(start=2, memoized=False):
     """Yield prime numbers from 'start'"""
     is_prime_fun = (memoize(is_prime) if memoized else is_prime)
-    return ifilter(is_prime_fun, count(start))
+    return filter(is_prime_fun, count(start))
 
 def digits_from_num_fast(num):
     """Get digits from num in base 10 (fast implementation)"""
