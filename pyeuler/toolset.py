@@ -254,7 +254,7 @@ def get_cardinal_name(num):
 
     # This needs some refactoring
     if not (0 <= num < 1e6):
-      raise ValueError, "value not supported: %s" % num
+      raise ValueError("value not supported: %s" % num)
     thousands = (num // 1000) % 1000
     strings = compact([
       thousands and (_get_hundreds(thousands) + ["thousand"]),
