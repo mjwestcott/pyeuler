@@ -66,13 +66,13 @@ def compose(f, g):
     def _wrapper(*args, **kwargs):
         return f(g(*args, **kwargs))
     return _wrapper
-  
+
 def iterate(func, arg):
     """After Haskell's iterate: apply function repeatedly."""
     # not functional
     while 1:
         yield arg
-        arg = func(arg)                
+        arg = func(arg)
 
 def accsum(it):
     """Yield accumulated sums of iterable: accsum(count(1)) -> 1,3,6,10,..."""
@@ -82,7 +82,7 @@ def tails(seq):
     """Get tails of a sequence: tails([1,2,3]) -> [1,2,3], [2,3], [3], []."""
     for idx in xrange(len(seq)+1):
         yield seq[idx:]
-     
+
 def ireduce(func, iterable, init=None):
     """Like reduce() but using iterators (a.k.a scanl)"""
     # not functional
@@ -108,10 +108,10 @@ def unique(it):
 def unique_functional(it):
     """Return items from iterator (order preserved)"""
     # functional but slow as hell. Just a proof-of-concept.
-    steps = ireduce(lambda (last, seen), x: ((last, seen) if x in seen 
+    steps = ireduce(lambda (last, seen), x: ((last, seen) if x in seen
       else ([x], seen.union([x]))), it, ([], set()))
     return (m for (m, g) in groupby(flatten(last for (last, seen) in steps)))
-        
+
 def identity(x):
     """Do nothing and return the variable untouched"""
     return x
@@ -207,7 +207,7 @@ def greatest_common_divisor(a, b):
     """Return greatest common divisor of a and b"""
     return (greatest_common_divisor(b, a % b) if b else a)
 
-def least_common_multiple(a, b): 
+def least_common_multiple(a, b):
     """Return least common multiples of a and b"""
     return (a * b) / greatest_common_divisor(a, b)
 
@@ -226,7 +226,7 @@ def is_pentagonal(n):
 
 def hexagonal(n):
     return n*(2*n - 1)
-       
+
 def get_cardinal_name(num):
     """Get cardinal name for number (0 to 1 million)"""
     numbers = {
@@ -239,20 +239,20 @@ def get_cardinal_name(num):
       }
     def _get_tens(n):
       a, b = divmod(n, 10)
-      return (numbers[n] if (n in numbers) else "%s-%s" % (numbers[10*a], numbers[b]))    
+      return (numbers[n] if (n in numbers) else "%s-%s" % (numbers[10*a], numbers[b]))
     def _get_hundreds(n):
       tens = n % 100
       hundreds = (n / 100) % 10
       return list(compact([
-        hundreds > 0 and numbers[hundreds], 
-        hundreds > 0 and "hundred", 
-        hundreds > 0 and tens and "and", 
+        hundreds > 0 and numbers[hundreds],
+        hundreds > 0 and "hundred",
+        hundreds > 0 and tens and "and",
         (not hundreds or tens > 0) and _get_tens(tens),
       ]))
 
     # This needs some refactoring
     if not (0 <= num < 1e6):
-      raise ValueError, "value not supported: %s" % num      
+      raise ValueError, "value not supported: %s" % num
     thousands = (num / 1000) % 1000
     strings = compact([
       thousands and (_get_hundreds(thousands) + ["thousand"]),
@@ -289,7 +289,7 @@ def memoize(f, maxcache=None, cache={}):
 
 class tail_recursive(object):
     """Tail recursive decorator."""
-    # Michele Simionato's version 
+    # Michele Simionato's version
     CONTINUE = object() # sentinel
 
     def __init__(self, func):
@@ -315,18 +315,18 @@ class tail_recursive(object):
         else: # reset and exit
             self.firstcall = True
             return result
-        
+
 class persistent(object):
     def __init__(self, it):
         self.it = it
-        
+
     def __getitem__(self, x):
         self.it, temp = tee(self.it)
         if type(x) is slice:
             return list(islice(temp, x.start, x.stop, x.step))
         else:
             return islice(temp, x, x+1).next()
-        
+
     def __iter__(self):
         self.it, temp = tee(self.it)
         return temp
