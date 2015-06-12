@@ -62,7 +62,7 @@ def problem11():
     def grid_get(grid, nr, nc, sr, sc):
         """Return cell for coordinate (nr, nc) is a grid of size (sr, sc)."""
         return (grid[nr][nc] if 0 <= nr < sr and 0 <= nc < sc else 0)
-    grid = [map(int, line.split()) for line in data.problem11.strip().splitlines()]
+    grid = [list(map(int, line.split())) for line in data.problem11.strip().splitlines()]
     # For each cell, get 4 groups in directions E, S, SE and SW
     diffs = [(0, +1), (+1, 0), (+1, +1), (+1, -1)]
     sr, sc = len(grid), len(grid[0])
@@ -128,7 +128,7 @@ def problem18():
         for moves in cartesian_product([0, +1], repeat=len(rows)-1):
             indexes = ireduce(operator.add, moves, 0)
             yield (row[index] for (row, index) in zip(rows, indexes))
-    rows = [map(int, line.split()) for line in data.problem18.strip().splitlines()]
+    rows = [list(map(int, line.split())) for line in data.problem18.strip().splitlines()]
     return max(sum(numbers) for numbers in get_numbers(rows))
 
 def problem19():
