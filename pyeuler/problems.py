@@ -6,7 +6,7 @@ from toolset import *
 
 def problem1():
     """Add all the natural numbers below 1000 that are multiples of 3 or 5."""
-    return sum(x for x in xrange(1, 1000) if x % 3 == 0 or x % 5 == 0)
+    return sum(x for x in range(1, 1000) if x % 3 == 0 or x % 5 == 0)
 
 def problem2():
     """Find the sum of all the even-valued terms in the Fibonacci < 4 million."""
@@ -22,7 +22,7 @@ def problem4():
     # A brute-force solution is a bit slow, let's try to simplify it a little bit:
     # x*y = "abccda" = 100001a + 10010b + 1100c = 11 * (9091a + 910b + 100c)
     # So at least one of them must be multiple of 11.
-    candidates = (x*y for x in xrange(110, 1000, 11) for y in xrange(x, 1000))
+    candidates = (x*y for x in range(110, 1000, 11) for y in range(x, 1000))
     return max(x for x in candidates if is_palindromic(x))
 
 def problem5():
@@ -33,8 +33,8 @@ def problem5():
 def problem6():
     """Find the difference between the sum of the squares of the first one
     hundred natural numbers and the square of the sum."""
-    sum_of_squares = sum(x**2 for x in xrange(1, 100+1))
-    square_of_sums = sum(xrange(1, 100+1))**2
+    sum_of_squares = sum(x**2 for x in range(1, 100+1))
+    square_of_sums = sum(range(1, 100+1))**2
     return square_of_sums - sum_of_squares
 
 def problem7():
@@ -49,7 +49,7 @@ def problem8():
 def problem9():
     """There exists exactly one Pythagorean triplet for which a + b + c = 1000.
     Find the product abc."""
-    triplets = ((a, b, 1000-a-b) for a in xrange(1, 999) for b in xrange(a+1, 999))
+    triplets = ((a, b, 1000-a-b) for a in range(1, 999) for b in range(a+1, 999))
     return first(a*b*c for (a, b, c) in triplets if a**2 + b**2 == c**2)
 
 def problem10():
@@ -90,7 +90,7 @@ def problem14():
     @memoize
     def collatz_series_length(n):
         return (1 + collatz_series_length(collatz_function(n)) if n>1 else 0)
-    return max(xrange(1, int(1e6)), key=collatz_series_length)
+    return max(range(1, int(1e6)), key=collatz_series_length)
 
 def problem15():
     """How many routes are there through a 20x20 grid?"""
@@ -112,7 +112,7 @@ def problem16():
 def problem17():
     """If all the numbers from 1 to 1000 (one thousand) inclusive were written
     out in words, how many letters would be used?"""
-    strings = (get_cardinal_name(n) for n in xrange(1, 1000+1))
+    strings = (get_cardinal_name(n) for n in range(1, 1000+1))
     return ilen(c for c in flatten(strings) if c.isalpha())
 
 def problem18():
@@ -139,7 +139,7 @@ def problem19():
     def get_days_for_month(year, month):
         days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
         return days[month-1] + (1 if (month == 2 and is_leap_year(year)) else 0)
-    years_months = ((year, month) for year in xrange(1901, 2001) for month in xrange(1, 12+1))
+    years_months = ((year, month) for year in range(1901, 2001) for month in range(1, 12+1))
     # Skip the last month (otherwise we would be checking for 1 Jan 2001)
     days = (get_days_for_month(y, m) for (y, m) in years_months if (y, m) != (2000, 12))
     # Let's index Monday with 0 and Sunday with 6. 1 Jan 1901 was a Tuesday (1)
@@ -152,7 +152,7 @@ def problem20():
 
 def problem21():
     """Evaluate the sum of all the amicable numbers under 10000."""
-    sums = dict((n, sum(proper_divisors(n))) for n in xrange(1, 10000))
+    sums = dict((n, sum(proper_divisors(n))) for n in range(1, 10000))
     return sum(a for (a, b) in sums.iteritems() if a != b and sums.get(b, 0) == a)
 
 def problem22():
@@ -165,8 +165,8 @@ def problem22():
 def problem23():
     """Find the sum of all the positive integers which cannot be written as
     the sum of two abundant numbers."""
-    abundants = set(x for x in xrange(1, 28123+1) if is_perfect(x) == 1)
-    return sum(x for x in xrange(1, 28123+1) if not any((x-a in abundants) for a in abundants))
+    abundants = set(x for x in range(1, 28123+1) if is_perfect(x) == 1)
+    return sum(x for x in range(1, 28123+1) if not any((x-a in abundants) for a in abundants))
 
 def problem24():
     """What is the millionth lexicographic permutation of the digits
@@ -196,7 +196,7 @@ def problem26():
     # A smarter (and much faster) solution: countdown from 1000 getting cycles'
     # length, and break when a denominator is lower the the current maximum
     # length (since a cycle cannot be larger than the denominator itself).
-    return max(xrange(2, 1000), key=lambda d: division(1, d)[1][1])
+    return max(range(2, 1000), key=lambda d: division(1, d)[1][1])
 
 def problem27():
     """Find the product of the coefficients, a and b, for the quadratic
@@ -207,24 +207,24 @@ def problem27():
     def primes_for_a_b(a_b):
         return takewhile(is_prime, (function(n, *a_b) for n in count(0)))
     # b must be prime so n=0 yields a prime (b itself)
-    b_candidates = list(x for x in xrange(1000) if is_prime(x))
-    candidates = ((a, b) for a in xrange(-1000, 1000) for b in b_candidates)
+    b_candidates = list(x for x in range(1000) if is_prime(x))
+    candidates = ((a, b) for a in range(-1000, 1000) for b in b_candidates)
     return product(max(candidates, key=compose(ilen, primes_for_a_b)))
 
 def problem28():
     """What is the sum of the numbers on the diagonals in a 1001 by 1001 spiral
     formed in the same way?"""
-    return 1 + sum(4*(n - 2)**2 + 10*(n - 1) for n in xrange(3, 1001+1, 2))
+    return 1 + sum(4*(n - 2)**2 + 10*(n - 1) for n in range(3, 1001+1, 2))
 
 def problem29():
     """How many distinct terms are in the sequence generated by a**b for
     2 <= a <= 100 and 2 <= b <= 100?"""
-    return ilen(unique(a**b for a in xrange(2, 100+1) for b in xrange(2, 100+1)))
+    return ilen(unique(a**b for a in range(2, 100+1) for b in range(2, 100+1)))
 
 def problem30():
     """Find the sum of all the numbers that can be written as the sum of fifth
     powers of their digits."""
-    candidates = xrange(2, 6*(9**5))
+    candidates = range(2, 6*(9**5))
     return sum(n for n in candidates if sum(x**5 for x in digits_from_num(n)) == n)
 
 def problem31():
@@ -236,7 +236,7 @@ def problem31():
             # Make it generic, do not assume that last unit is 1
             yield (remaining/units[0],)
         elif units:
-            for weight in xrange(0, remaining + 1, units[0]):
+            for weight in range(0, remaining + 1, units[0]):
                 for other_weights in get_weights(units[1:], remaining - weight):
                    yield (weight/units[0],) + other_weights
     coins = [1, 2, 5, 10, 20, 50, 100, 200]
@@ -271,8 +271,8 @@ def problem33():
         reduced = reduce_fraction(numerator, denominator)
         return (b == c and reduce_fraction(a, d) == reduced or
                 a == d and reduce_fraction(b, c) == reduced)
-    curious_fractions = ((num, denom) for num in xrange(10, 100)
-        for denom in xrange(num+1, 100) if is_curious(num, denom))
+    curious_fractions = ((num, denom) for num in range(10, 100)
+        for denom in range(num+1, 100) if is_curious(num, denom))
     numerator, denominator = map(product, zip(*curious_fractions))
     return reduce_fraction(numerator, denominator)[1]
 
@@ -280,7 +280,7 @@ def problem34():
     """Find the sum of all numbers which are equal to the sum of the factorial
     of their digits."""
     # Cache digits from 0 to 9 to speed it up a little bit
-    dfactorials = dict((x, factorial(x)) for x in xrange(10))
+    dfactorials = dict((x, factorial(x)) for x in range(10))
 
     # Upper bound: ndigits*9! < 10^ndigits -> upper_bound = ndigits*9!
     # That makes 7*9! = 2540160. That's quite a number, so it will be slow.
@@ -289,17 +289,17 @@ def problem34():
     # groups of N (1..7), and check the sum value. Note that the upper bound
     # condition is in this case harder to apply.
     upper_bound = first(n*dfactorials[9] for n in count(1) if n*dfactorials[9] < 10**n)
-    return sum(x for x in xrange(3, upper_bound)
+    return sum(x for x in range(3, upper_bound)
         if x == sum(dfactorials[d] for d in digits_from_num_fast(x)))
 
 def problem35():
     """How many circular primes are there below one million?"""
     def is_circular_prime(digits):
         return all(is_prime(num_from_digits(digits[r:] + digits[:r]))
-            for r in xrange(len(digits)))
+            for r in range(len(digits)))
     # We will use only 4 digits (1, 3, 7, and 9) to generate candidates, so we
     # must consider the four one-digit primes separately.
-    circular_primes = (num_from_digits(ds) for n in xrange(2, 6+1)
+    circular_primes = (num_from_digits(ds) for n in range(2, 6+1)
         for ds in cartesian_product([1, 3, 7, 9], repeat=n) if is_circular_prime(ds))
     return ilen(chain([2, 3, 5, 7], circular_primes))
 
@@ -308,7 +308,7 @@ def problem36():
     palindromic in base 10 and base 2."""
     # Apply a basic constraint: a binary number starts with 1, and to be
     # palindromic it must also end with 1, so candidates are odd numbers.
-    return sum(x for x in xrange(1, int(1e6), 2)
+    return sum(x for x in range(1, int(1e6), 2)
         if is_palindromic(x, base=10) and is_palindromic(x, base=2))
 
 def problem37():
@@ -333,18 +333,18 @@ def problem38():
         if len(candidate_digits) == 9 and is_pandigital(candidate_digits):
             return num_from_digits(candidate_digits)
     # 987654321 is the maximum (potential) pandigital, so 9876 is a reasonable upper bound
-    return first(compact(pandigital_concatenated_product(n) for n in xrange(9876+1, 0, -1)))
+    return first(compact(pandigital_concatenated_product(n) for n in range(9876+1, 0, -1)))
 
 def problem39():
     """if p is the perimeter of a right angle triangle with integral length
     sides, {a,b,c}, for which value of p < 1000 is the number of solutions
     maximized?"""
     def get_sides_for_perimeter(perimeter):
-        sides = ((perimeter-b-c, b, c) for b in xrange(1, perimeter/2 + 1)
-            for c in xrange(b, perimeter/2 + 1))
+        sides = ((perimeter-b-c, b, c) for b in range(1, perimeter/2 + 1)
+            for c in range(b, perimeter/2 + 1))
         return ((a, b, c) for (a, b, c) in sides if a**2 == b**2 + c**2)
     # Brute-force, check pythagorian triplets for a better solution
-    return max(xrange(120, 1000), key=compose(ilen, get_sides_for_perimeter))
+    return max(range(120, 1000), key=compose(ilen, get_sides_for_perimeter))
 
 def problem40():
     """An irrational decimal fraction is created by concatenating the positive
@@ -407,7 +407,7 @@ def problem44():
     and difference is pentagonal and D = |Pk - Pj| is minimised; what is the
     value of D?"""
     pairs = ((p1, p2) for (n1, p1) in ((n, pentagonal(n)) for n in count(0))
-        for p2 in (pentagonal(n) for n in xrange(1, n1))
+        for p2 in (pentagonal(n) for n in range(1, n1))
         if is_pentagonal(p1-p2) and is_pentagonal(p1+p2))
     p1, p2 = first(pairs)
     return p1 - p2
@@ -439,7 +439,7 @@ def problem47():
 
 def problem48():
     """Find the last ten digits of the series, 1^1 + 2^2 + 3^3 + ... + 1000^1000"""
-    return sum(x**x for x in xrange(1, 1000+1)) % 10**10
+    return sum(x**x for x in range(1, 1000+1)) % 10**10
 
 def problem49():
     """The arithmetic sequence, 1487, 4817, 8147, in which each of the terms
@@ -453,7 +453,7 @@ def problem49():
         return set(digits_from_num(n))
     def get_triplets(primes):
         for x1 in sorted(primes):
-            for d in xrange(2, (10000-x1)/2 + 1, 2):
+            for d in range(2, (10000-x1)/2 + 1, 2):
                 x2 = x1 + d
                 x3 = x1 + 2*d
                 if x2 in primes and x3 in primes and ds(x1) == ds(x2) == ds(x3):

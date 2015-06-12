@@ -80,7 +80,7 @@ def accsum(it):
 
 def tails(seq):
     """Get tails of a sequence: tails([1,2,3]) -> [1,2,3], [2,3], [3], []."""
-    for idx in xrange(len(seq)+1):
+    for idx in range(len(seq)+1):
         yield seq[idx:]
 
 def ireduce(func, iterable, init=None):
@@ -122,7 +122,7 @@ def occurrences(it, exchange=False):
 
 def ncombinations(n, k):
     """Combinations of k elements from a group of n"""
-    return cartesian_product(xrange(n-k+1, n+1)) / factorial(k)
+    return cartesian_product(range(n-k+1, n+1)) / factorial(k)
 
 def combinations_with_replacement(iterable, r):
     """combinations_with_replacement('ABC', 2) --> AA AB AC BB BC CC"""
@@ -141,7 +141,7 @@ def fibonacci():
 
 def factorial(num):
     """Return factorial value of num (num!)"""
-    return product(xrange(2, num+1))
+    return product(range(2, num+1))
 
 def is_integer(x, epsilon=1e-6):
     """Return True if the float x "seems" an integer"""
@@ -162,7 +162,7 @@ def is_prime(n):
         return (n == 2)
     elif n % 2 == 0:
         return False
-    elif any(((n % x) == 0) for x in xrange(3, int(sqrt(n))+1, 2)):
+    elif any(((n % x) == 0) for x in range(3, int(sqrt(n))+1, 2)):
         return False
     return True
 
@@ -195,7 +195,7 @@ def is_palindromic(num, base=10):
 
 def prime_factors(num, start=2):
     """Return all prime factors (ordered) of num in a list"""
-    candidates = xrange(start, int(sqrt(num)) + 1)
+    candidates = range(start, int(sqrt(num)) + 1)
     factor = next((x for x in candidates if (num % x == 0)), None)
     return ([factor] + prime_factors(num / factor, factor) if factor else [num])
 
@@ -270,7 +270,7 @@ def number_of_digits(num, base=10):
 
 def is_pandigital(digits, through=range(1, 10)):
     """Return True if digits form a pandigital number"""
-    return (sorted(digits) == through)
+    return (sorted(digits) == list(through))
 
 # Decorators
 
