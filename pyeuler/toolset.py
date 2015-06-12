@@ -109,8 +109,9 @@ def unique(it):
 def unique_functional(it):
     """Return items from iterator (order preserved)"""
     # functional but slow as hell. Just a proof-of-concept.
-    steps = ireduce(lambda (last, seen), x: ((last, seen) if x in seen
-      else ([x], seen.union([x]))), it, ([], set()))
+    steps = ireduce(lambda last_seen, x: ((last_seen[0], last_seen[1]) if x in last_seen[1]
+                                          else ([x], last_seen[1].union([x]))),
+                    it, ([], set()))
     return (m for (m, g) in groupby(flatten(last for (last, seen) in steps)))
 
 def identity(x):
@@ -137,7 +138,7 @@ def combinations_with_replacement(iterable, r):
 
 def fibonacci():
     """Generate fibonnacci serie"""
-    get_next = lambda (a, b), _: (b, a+b)
+    get_next = lambda a_b, _: (a_b[1], a_b[0]+a_b[1])
     return (b for (a, b) in ireduce(get_next, count(), (0, 1)))
 
 def factorial(num):
