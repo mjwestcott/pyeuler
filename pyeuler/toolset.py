@@ -182,7 +182,7 @@ def digits_from_num(num, base=10):
     def recursive(num, base, current):
         if num < base:
             return current+[num]
-        return recursive(num/base, base, current + [num%base])
+        return recursive(num//base, base, current + [num%base])
     return list(reversed(recursive(num, base, [])))
 
 def num_from_digits(digits, base=10):
@@ -244,7 +244,7 @@ def get_cardinal_name(num):
       return (numbers[n] if (n in numbers) else "%s-%s" % (numbers[10*a], numbers[b]))
     def _get_hundreds(n):
       tens = n % 100
-      hundreds = (n / 100) % 10
+      hundreds = (n // 100) % 10
       return list(compact([
         hundreds > 0 and numbers[hundreds],
         hundreds > 0 and "hundred",
@@ -255,7 +255,7 @@ def get_cardinal_name(num):
     # This needs some refactoring
     if not (0 <= num < 1e6):
       raise ValueError, "value not supported: %s" % num
-    thousands = (num / 1000) % 1000
+    thousands = (num // 1000) % 1000
     strings = compact([
       thousands and (_get_hundreds(thousands) + ["thousand"]),
       (num % 1000 or not thousands) and _get_hundreds(num % 1000),

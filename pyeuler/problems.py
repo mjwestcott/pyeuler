@@ -340,8 +340,8 @@ def problem39():
     sides, {a,b,c}, for which value of p < 1000 is the number of solutions
     maximized?"""
     def get_sides_for_perimeter(perimeter):
-        sides = ((perimeter-b-c, b, c) for b in range(1, perimeter/2 + 1)
-            for c in range(b, perimeter/2 + 1))
+        sides = ((perimeter-b-c, b, c) for b in range(1, perimeter//2 + 1)
+            for c in range(b, perimeter//2 + 1))
         return ((a, b, c) for (a, b, c) in sides if a**2 == b**2 + c**2)
     # Brute-force, check pythagorian triplets for a better solution
     return max(range(120, 1000), key=compose(ilen, get_sides_for_perimeter))
@@ -453,7 +453,7 @@ def problem49():
         return set(digits_from_num(n))
     def get_triplets(primes):
         for x1 in sorted(primes):
-            for d in range(2, (10000-x1)/2 + 1, 2):
+            for d in range(2, (10000-x1)//2 + 1, 2):
                 x2 = x1 + d
                 x3 = x1 + 2*d
                 if x2 in primes and x3 in primes and ds(x1) == ds(x2) == ds(x3):
