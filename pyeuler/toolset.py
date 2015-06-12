@@ -13,11 +13,11 @@ def take(n, iterable):
 
 def index(n, iterable):
     "Returns the nth item"
-    return islice(iterable, n, n+1).next()
+    return next(islice(iterable, n, n+1))
 
 def first(iterable):
     """Take first element in the iterable"""
-    return iterable.next()
+    return next(iterable)
 
 def last(iterable):
     """Take last element in the iterable"""
@@ -89,7 +89,7 @@ def ireduce(func, iterable, init=None):
     # not functional
     if init is None:
         iterable = iter(iterable)
-        curr = iterable.next()
+        curr = next(iterable)
     else:
         curr = init
         yield init
@@ -326,7 +326,7 @@ class persistent(object):
         if type(x) is slice:
             return list(islice(temp, x.start, x.stop, x.step))
         else:
-            return islice(temp, x, x+1).next()
+            return next(islice(temp, x, x+1))
 
     def __iter__(self):
         self.it, temp = tee(self.it)
