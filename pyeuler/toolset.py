@@ -102,14 +102,6 @@ def unique(it):
             seen.add(x)
             yield x
 
-def unique_functional(it):
-    """Return items from iterator (order preserved)"""
-    # functional but slow as hell. Just a proof-of-concept.
-    steps = ireduce(lambda last_seen, x: ((last_seen[0], last_seen[1]) if x in last_seen[1]
-                                          else ([x], last_seen[1].union([x]))),
-                    it, ([], set()))
-    return (m for (m, g) in groupby(flatten(last for (last, seen) in steps)))
-
 def identity(x):
     """Do nothing and return the variable untouched"""
     return x
