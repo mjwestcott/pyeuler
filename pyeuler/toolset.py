@@ -1,12 +1,12 @@
 #!/usr/bin/python
 import operator
 from collections import deque
-from itertools import islice, repeat, groupby, accumulate
-from itertools import count, takewhile, tee
-from itertools import chain, starmap, cycle, dropwhile
-from itertools import combinations, permutations, product as cartesian_product
 from functools import reduce
 from math import sqrt, log, log10, ceil
+from itertools import (accumulate, chain, combinations, count, cycle,
+                       dropwhile, filterfalse, groupby, islice, permutations,
+                       repeat, starmap, takewhile, tee, zip_longest,
+                       product as cartesian_product)
 
 def take(n, iterable):
     """Take first n elements from iterable"""
