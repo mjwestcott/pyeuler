@@ -62,7 +62,8 @@ def problem11():
     def grid_get(grid, nr, nc, sr, sc):
         """Return cell for coordinate (nr, nc) is a grid of size (sr, sc)."""
         return (grid[nr][nc] if 0 <= nr < sr and 0 <= nc < sc else 0)
-    grid = [list(map(int, line.split())) for line in data.problem11.strip().splitlines()]
+    grid = [list(map(int, line.split()))
+            for line in data.problem11.strip().splitlines()]
     # For each cell, get 4 groups in directions E, S, SE and SW
     diffs = [(0, +1), (+1, 0), (+1, +1), (+1, -1)]
     sr, sc = len(grid), len(grid[0])
@@ -128,7 +129,8 @@ def problem18():
         for moves in cartesian_product([0, +1], repeat=len(rows)-1):
             indexes = ireduce(operator.add, moves, 0)
             yield (row[index] for (row, index) in zip(rows, indexes))
-    rows = [list(map(int, line.split())) for line in data.problem18.strip().splitlines()]
+    rows = [list(map(int, line.split()))
+            for line in data.problem18.strip().splitlines()]
     return max(sum(numbers) for numbers in get_numbers(rows))
 
 def problem19():
@@ -139,9 +141,13 @@ def problem19():
     def get_days_for_month(year, month):
         days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
         return days[month-1] + (1 if (month == 2 and is_leap_year(year)) else 0)
-    years_months = ((year, month) for year in range(1901, 2001) for month in range(1, 12+1))
+    years_months = ((year, month)
+                    for year in range(1901, 2001)
+                    for month in range(1, 12+1))
     # Skip the last month (otherwise we would be checking for 1 Jan 2001)
-    days = (get_days_for_month(y, m) for (y, m) in years_months if (y, m) != (2000, 12))
+    days = (get_days_for_month(y, m)
+            for (y, m) in years_months
+            if (y, m) != (2000, 12))
     # Let's index Monday with 0 and Sunday with 6. 1 Jan 1901 was a Tuesday (1)
     weekday_of_first_day_of_months = ireduce(lambda wd, d: (wd+d) % 7, days, 1)
     return sum(1 for weekday in weekday_of_first_day_of_months if weekday == 6)
@@ -166,7 +172,8 @@ def problem23():
     """Find the sum of all the positive integers which cannot be written as
     the sum of two abundant numbers."""
     abundants = set(x for x in range(1, 28123+1) if is_perfect(x) == 1)
-    return sum(x for x in range(1, 28123+1) if not any((x-a in abundants) for a in abundants))
+    return sum(x for x in range(1, 28123+1)
+               if not any((x-a in abundants) for a in abundants))
 
 def problem24():
     """What is the millionth lexicographic permutation of the digits
@@ -246,7 +253,8 @@ def problem32():
     """Find the sum of all products whose multiplicand/multiplier/product
     identity can be written as a 1 through 9 pandigital"""
     def get_permutation(ndigits):
-        return ((num_from_digits(ds), list(ds)) for ds in permutations(range(1, 10), ndigits))
+        return ((num_from_digits(ds), list(ds))
+                for ds in permutations(range(1, 10), ndigits))
     def get_multiplicands(ndigits1, ndigits2):
         return cartesian_product(get_permutation(ndigits1), get_permutation(ndigits2))
     # We have two cases for A * B = C: 'a * bcde = fghi' and 'ab * cde = fghi'
@@ -333,7 +341,8 @@ def problem38():
         if len(candidate_digits) == 9 and is_pandigital(candidate_digits):
             return num_from_digits(candidate_digits)
     # 987654321 is the maximum (potential) pandigital, so 9876 is a reasonable upper bound
-    return first(compact(pandigital_concatenated_product(n) for n in range(9876+1, 0, -1)))
+    return first(compact(pandigital_concatenated_product(n)
+                         for n in range(9876+1, 0, -1)))
 
 def problem39():
     """if p is the perimeter of a right angle triangle with integral length
@@ -479,14 +488,14 @@ def problem50():
     return get_max_length(primes, 0)
 
 def problem51():
-    """By replacing the 1st digit of the 2-digit number *3, it turns out that six of
-    the nine possible values: 13, 23, 43, 53, 73, and 83, are all prime.
+    """By replacing the 1st digit of the 2-digit number *3, it turns out that
+    six of the nine possible values: 13, 23, 43, 53, 73, and 83, are all prime.
 
     By replacing the 3rd and 4th digits of 56**3 with the same digit, this
     5-digit number is the first example having seven primes among the ten
     generated numbers, yielding the family: 56003, 56113, 56333, 56443, 56663,
-    56773, and 56993. Consequently 56003, being the first member of this family,
-    is the smallest prime with this property.
+    56773, and 56993. Consequently 56003, being the first member of this
+    family, is the smallest prime with this property.
 
     Find the smallest prime which, by replacing part of the number (not
     necessarily adjacent digits) with the same digit, is part of an eight prime
