@@ -125,9 +125,11 @@ def combinations_with_replacement(iterable, r):
 # Common maths functions
 
 def fibonacci():
-    """Generate fibonnacci serie"""
-    get_next = lambda a_b, _: (a_b[1], a_b[0]+a_b[1])
-    return (b for (a, b) in ireduce(get_next, count(), (0, 1)))
+    """Generate fibonnacci series."""
+    x, y = 0, 1
+    while True:
+        yield x
+        x, y = y, x + y
 
 def factorial(num):
     """Return factorial value of num (num!)"""
