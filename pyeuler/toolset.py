@@ -20,6 +20,18 @@ def first(iterator):
     """Take first element in the iterator"""
     return next(iterator)
 
+def first_true(iterable, default=False, pred=None):
+    """Returns the first true value in the iterable.
+
+    If no true value is found, returns *default*
+
+    If *pred* is not None, returns the first item
+    for which pred(item) is true.
+    """
+    # first_true([a,b,c], x) --> a or b or c or x
+    # first_true([a,b], x, f) --> a if f(a) else b if f(b) else x
+    return next(filter(pred, iterable), default)
+
 def last(iterable):
     """Take last element in the iterable"""
     return reduce(lambda x, y: y, iterable)
@@ -55,6 +67,10 @@ def flatten(lstlsts):
 def compact(iterable):
     """Filter None values from an iterable"""
     return filter(bool, iterable)
+
+def quantify(iterable, pred=bool):
+    "Count how many times the predicate is true"
+    return sum(map(pred, iterable))
 
 def groups(iterable, n, step):
     """Make groups of 'n' elements from the iterable advancing
@@ -169,6 +185,10 @@ def get_primes(start=2, memoized=False):
     """Yield prime numbers from 'start'"""
     is_prime_fun = (memoize(is_prime) if memoized else is_prime)
     return filter(is_prime_fun, count(start))
+
+def binary_nums(n):
+    "Return iterator over all n-digit binary numbers"
+    return cartesian_product([0, 1], repeat=n)
 
 def digits_from_num_fast(num):
     """Get digits from num in base 10 (fast implementation)"""
