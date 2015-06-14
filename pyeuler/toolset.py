@@ -64,7 +64,7 @@ def groups(iterable, n, step):
     return take_every(step, onestepit)
 
 def compose(f, g):
-    """Compose two functions -> compose(f, g)(x) -> f(g(x))"""
+    """Compose two functions: compose(f, g)(x) --> f(g(x))"""
     def _wrapper(*args, **kwargs):
         return f(g(*args, **kwargs))
     return _wrapper
@@ -83,7 +83,7 @@ def tail(n, iterable):
 
 def all_tails(seq):
     "Yield last n, n-1, n-2, ..., items, where n = len(seq)."
-    # all_tails([1,2,3]) -> [1,2,3], [2,3], [3], []
+    # all_tails([1,2,3]) --> [1,2,3], [2,3], [3], []
     for idx in range(len(seq)+1):
         yield seq[idx:]
 
