@@ -39,7 +39,7 @@ def problem6():
 
 def problem7():
     """What is the 10001st prime number?."""
-    return index(10001-1, get_primes())
+    return nth(get_primes(), 10001-1)
 
 def problem8():
     """Find the greatest product of five consecutive digits in the 1000-digit number"""
@@ -171,7 +171,7 @@ def problem23():
 def problem24():
     """What is the millionth lexicographic permutation of the digits
     0, 1, 2, 3, 4, 5, 6, 7, 8 and 9?"""
-    return num_from_digits(index(int(1e6)-1, permutations(range(10), 10)))
+    return num_from_digits(nth(permutations(range(10), 10), int(1e6)-1))
 
 def problem25():
     """What is the first term in the Fibonacci sequence to contain 1000 digits?"""
@@ -459,7 +459,7 @@ def problem49():
                 if x2 in primes and x3 in primes and ds(x1) == ds(x2) == ds(x3):
                     yield (x1, x2, x3)
     primes = set(takewhile(lambda x: x < 10000, get_primes(1000)))
-    solution = index(1, get_triplets(primes))
+    solution = nth(get_triplets(primes), 1)
     return num_from_digits(flatten(digits_from_num(x) for x in solution))
 
 def problem50():

@@ -11,9 +11,9 @@ def take(n, iterable):
     """Take first n elements from iterable"""
     return islice(iterable, n)
 
-def index(n, iterable):
-    "Returns the nth item"
-    return next(islice(iterable, n, n+1))
+def nth(iterable, n, default=None):
+    "Returns the nth item or a default value"
+    return next(islice(iterable, n, None), default)
 
 def first(iterator):
     """Take first element in the iterator"""
