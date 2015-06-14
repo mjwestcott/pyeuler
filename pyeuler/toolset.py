@@ -3,7 +3,7 @@ import collections
 import operator
 from functools import reduce
 from math import sqrt, log, log10, ceil
-from itertools import (accumulate, chain, combinations, count, cycle,
+from itertools import (accumulate, chain, combinations, compress, count, cycle,
                        dropwhile, filterfalse, groupby, islice, permutations,
                        repeat, starmap, takewhile, tee, zip_longest,
                        product as cartesian_product)
