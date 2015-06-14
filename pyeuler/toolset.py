@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import operator
-from itertools import islice, repeat, groupby
+from itertools import islice, repeat, groupby, accumulate
 from itertools import count, takewhile, tee
 from itertools import chain, starmap, cycle, dropwhile
 from itertools import combinations, permutations, product as cartesian_product
@@ -74,10 +74,6 @@ def iterate(func, arg):
     while 1:
         yield arg
         arg = func(arg)
-
-def accsum(it):
-    """Yield accumulated sums of iterable: accsum(count(1)) -> 1,3,6,10,..."""
-    return drop(1, ireduce(operator.add, it, 0))
 
 def tails(seq):
     """Get tails of a sequence: tails([1,2,3]) -> [1,2,3], [2,3], [3], []."""
