@@ -1,6 +1,6 @@
 #!/usr/bin/python
+import collections
 import operator
-from collections import deque
 from functools import reduce
 from math import sqrt, log, log10, ceil
 from itertools import (accumulate, chain, combinations, count, cycle,
