@@ -151,7 +151,7 @@ def fibonacci():
     """Generate fibonnacci series."""
     x, y = 0, 1
     while True:
-        yield x
+        yield y
         x, y = y, x + y
 
 def factorial(num):
