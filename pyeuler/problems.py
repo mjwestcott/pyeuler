@@ -340,7 +340,8 @@ def problem38():
         candidate_digits = first(ds for ds in products if len(ds) >= 9)
         if len(candidate_digits) == 9 and is_pandigital(candidate_digits):
             return num_from_digits(candidate_digits)
-    # 987654321 is the maximum (potential) pandigital, so 9876 is a reasonable upper bound
+    # 987654321 is the maximum (potential) pandigital,
+    # so 9876 is a reasonable upper bound.
     return first(compact(pandigital_concatenated_product(n)
                          for n in range(9876+1, 0, -1)))
 
@@ -367,7 +368,8 @@ def problem40():
                 yield digits
     # We could get a formula for dn, but brute-force is fast enough
     indexes = set([1, 10, 100, 1000, 10000, 100000, 1000000])
-    decimals = (d for (idx, d) in enumerate(flatten(count_digits()), 1) if idx in indexes)
+    decimals = (d for (idx, d) in enumerate(flatten(count_digits()), 1)
+                if idx in indexes)
     return product(take(len(indexes), decimals))
 
 def problem41():
@@ -424,14 +426,16 @@ def problem44():
 def problem45():
     """It can be verified that T285 = P165 = H143 = 40755. Find the next
     triangle number that is also pentagonal and hexagonal."""
-    # Hexagonal numbers are also triangle, so we'll check only whether they are pentagonal
+    # Hexagonal numbers are also triangle, so we'll check
+    # only whether they are pentagonal.
     hexagonal_candidates = (hexagonal(x) for x in count(143+1))
     return first(x for x in hexagonal_candidates if is_pentagonal(x))
 
 def problem46():
     """What is the smallest odd composite that cannot be written as the sum
     of a prime and twice a square?"""
-    # primes will be iterated over and over and incremently, so better use a cached generator
+    # Primes will be iterated over and over and incremently, so better use a
+    # cached generator.
     primes = persistent(get_primes())
     def satisfies_conjecture(x):
         test_primes = takewhile(lambda p: p <  x, primes)
