@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import operator
+from collections import deque
 from itertools import islice, repeat, groupby, accumulate
 from itertools import count, takewhile, tee
 from itertools import chain, starmap, cycle, dropwhile
@@ -75,8 +76,14 @@ def iterate(func, arg):
         yield arg
         arg = func(arg)
 
-def tails(seq):
-    """Get tails of a sequence: tails([1,2,3]) -> [1,2,3], [2,3], [3], []."""
+def tail(n, iterable):
+    "Return an iterator over the last n items"
+    # tail(3, 'ABCDEFG') --> E F G
+    return iter(collections.deque(iterable, maxlen=n))
+
+def all_tails(seq):
+    "Yield last n, n-1, n-2, ..., items, where n = len(seq)."
+    # all_tails([1,2,3]) -> [1,2,3], [2,3], [3], []
     for idx in range(len(seq)+1):
         yield seq[idx:]
 
