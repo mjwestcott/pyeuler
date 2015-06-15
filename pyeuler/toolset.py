@@ -214,8 +214,8 @@ def num_from_digits(digits, base=10):
     return sum(x*(base**n) for (n, x) in enumerate(reversed(list(digits))) if x)
 
 def is_palindromic(num, base=10):
-    """Check if 'num' in base 'base' is a palindrome, that's it, if it can be
-    read equally from left to right and right to left."""
+    """Check if 'num' in the given base is a palindrome, that is, if it is the
+    same number when read left-to-right or right-to-left."""
     digitslst = digits_from_num(num, base)
     return digitslst == list(reversed(digitslst))
 
