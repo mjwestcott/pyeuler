@@ -539,3 +539,46 @@ def problem53():
     return sum(1 for i in range(1, 101)
                  for j in range(1, i+1)
                  if C(i, j) > 1e6)
+
+def problem54():
+    """The file, poker.txt, contains one-thousand random hands dealt to two
+    players. How many hands does Player 1 win?"""
+    suits = lambda hand: [h[1] for h in hand]
+    ranks = lambda hand: [h[0] for h in hand]
+    # convert string representations of ranks
+    convert = {'A': 14, 'K': 13, 'Q': 12, 'J': 11, 'T': 10}
+    ranks = compose(lambda lst: sorted([convert[x] if x in convert else int(x)
+                                        for x in lst], reverse=True),
+                    ranks)
+    # aces may play high or low for the purpose of making a straight
+    ranks = compose(lambda lst: lst if lst != [14, 5, 4, 3, 2] else [5, 4, 3, 2, 1],
+                    ranks)
+    # for the purpose of valuation, ranks should be ordered foremost by count
+    ranks = compose(lambda lst: sorted(lst, key=lambda x: lst.count(x), reverse=True),
+                    ranks)
+    # group([5, 5, 10, 10, 13]) --> [2, 2, 1]
+    group = lambda ranks: sorted(collections.Counter(ranks).values(), reverse=True)
+    straightflush = lambda hand: flush(hand) and straight(hand)
+    fourofakind = lambda hand: group(ranks(hand)) == [4, 1]
+    fullhouse = lambda hand: group(ranks(hand)) == [3, 2]
+    flush = lambda hand: len(set(suits(hand))) == 1
+    straight = lambda hand: ((max(ranks(hand)) - min(ranks(hand)) == 4)
+                             and group(ranks(hand)) == [1, 1, 1, 1, 1])
+    threeofakind = lambda hand: group(ranks(hand)) == [3, 1, 1]
+    twopair = lambda hand: group(ranks(hand)) == [2, 2, 1]
+    onepair = lambda hand: group(ranks(hand)) == [2, 1, 1, 1]
+    # Return a value for the hand and its ranks to break ties
+    value = lambda hand: ((8 if straightflush(hand) else
+                           7 if fourofakind(hand) else
+                           6 if fullhouse(hand) else
+                           5 if flush(hand) else
+                           4 if straight(hand) else
+                           3 if threeofakind(hand) else
+                           2 if twopair(hand) else
+                           1 if onepair(hand) else
+                           0), ranks(hand))
+    compare = lambda hand1, hand2: 1 if max((hand1, hand2), key=value) == hand1 else 0
+    players = lambda row: (row[:5], row[5:])
+    with open("poker.txt", "r") as f:
+        rows = f.readlines()
+        return sum(compare(*players(row.split())) for row in rows)
