@@ -542,9 +542,9 @@ def problem53():
     """How many, not necessarily distinct, values of nCr, for 1 ≤ n ≤ 100, are
     greater than one-million?"""
     C = lambda n, r: factorial(n) / (factorial(r) * factorial(n - r))
-    return sum(1 for i in range(1, 101)
-                 for j in range(1, i+1)
-                 if C(i, j) > 1e6)
+    return sum(1 for n in range(1, 101)
+                 for r in range(1, n+1)
+                 if C(n, r) > 1e6)
 
 def problem54():
     """The file, poker.txt, contains one-thousand random hands dealt to two
