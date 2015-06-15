@@ -516,7 +516,7 @@ def problem51():
         # replace_digits(3537, [1, 1, 0, 0], 9) --> 9937
         apply_mask = lambda x, y: val if y else x
         digits = list(map(apply_mask, digits_from_num_fast(num), mask))
-        return int(''.join(map(str, digits))) if digits[0] != 0 else -1
+        return num_from_digits(digits) if digits[0] != 0 else -1
     # For each prime above 56995, for all possible binary masks
     # representing ways to replace digits in that number, yield
     # the corresponding family of ten digits
