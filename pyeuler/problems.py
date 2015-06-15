@@ -68,7 +68,9 @@ def problem11():
     diffs = [(0, +1), (+1, 0), (+1, +1), (+1, -1)]
     sr, sc = len(grid), len(grid[0])
     return max(product(grid_get(grid, nr+i*dr, nc+i*dc, sr, sc) for i in range(4))
-        for nr in range(sr) for nc in range(sc) for (dr, dc) in diffs)
+               for nr in range(sr)
+               for nc in range(sc)
+               for (dr, dc) in diffs)
 
 def problem12():
     """What is the value of the first triangle number to have over five
@@ -141,9 +143,8 @@ def problem19():
     def get_days_for_month(year, month):
         days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
         return days[month-1] + (1 if (month == 2 and is_leap_year(year)) else 0)
-    years_months = ((year, month)
-                    for year in range(1901, 2001)
-                    for month in range(1, 12+1))
+    years_months = ((year, month) for year in range(1901, 2001)
+                                  for month in range(1, 12+1))
     # Skip the last month (otherwise we would be checking for 1 Jan 2001)
     days = (get_days_for_month(y, m)
             for (y, m) in years_months
@@ -173,7 +174,7 @@ def problem23():
     the sum of two abundant numbers."""
     abundants = set(x for x in range(1, 28123+1) if is_perfect(x) == 1)
     return sum(x for x in range(1, 28123+1)
-               if not any((x-a in abundants) for a in abundants))
+                 if not any((x-a in abundants) for a in abundants))
 
 def problem24():
     """What is the millionth lexicographic permutation of the digits
@@ -261,7 +262,8 @@ def problem32():
     # Also, since C has always 4 digits, 1e3 <= A*B < 1e4
     candidates = chain(get_multiplicands(1, 4), get_multiplicands(2, 3))
     return sum(unique(a*b for ((a, adigits), (b, bdigits)) in candidates
-        if a*b < 1e4 and is_pandigital(adigits + bdigits + digits_from_num(a*b))))
+                          if a*b < 1e4
+                          and is_pandigital(adigits + bdigits + digits_from_num(a*b))))
 
 def problem33():
     """There are exactly four non-trivial examples of this type of fraction,
@@ -280,7 +282,8 @@ def problem33():
         return (b == c and reduce_fraction(a, d) == reduced or
                 a == d and reduce_fraction(b, c) == reduced)
     curious_fractions = ((num, denom) for num in range(10, 100)
-        for denom in range(num+1, 100) if is_curious(num, denom))
+                                      for denom in range(num+1, 100)
+                                      if is_curious(num, denom))
     numerator, denominator = map(product, zip(*curious_fractions))
     return reduce_fraction(numerator, denominator)[1]
 
@@ -308,7 +311,8 @@ def problem35():
     # We will use only 4 digits (1, 3, 7, and 9) to generate candidates, so we
     # must consider the four one-digit primes separately.
     circular_primes = (num_from_digits(ds) for n in range(2, 6+1)
-        for ds in cartesian_product([1, 3, 7, 9], repeat=n) if is_circular_prime(ds))
+                                           for ds in cartesian_product([1, 3, 7, 9], repeat=n)
+                                           if is_circular_prime(ds))
     return ilen(chain([2, 3, 5, 7], circular_primes))
 
 def problem36():
@@ -418,8 +422,8 @@ def problem44():
     and difference is pentagonal and D = |Pk - Pj| is minimised; what is the
     value of D?"""
     pairs = ((p1, p2) for (n1, p1) in ((n, pentagonal(n)) for n in count(0))
-        for p2 in (pentagonal(n) for n in range(1, n1))
-        if is_pentagonal(p1-p2) and is_pentagonal(p1+p2))
+                      for p2 in (pentagonal(n) for n in range(1, n1))
+                      if is_pentagonal(p1-p2) and is_pentagonal(p1+p2))
     p1, p2 = first(pairs)
     return p1 - p2
 
