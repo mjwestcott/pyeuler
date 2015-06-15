@@ -92,12 +92,11 @@ def fmap(flist, arg):
         result = f(result)
     return result
 
-def iterate(func, arg):
-    """After Haskell's iterate: apply function repeatedly."""
-    # not functional
-    while 1:
-        yield arg
+def repeatfunc(func, arg):
+    "Yield result of repeatedly applying func to arg"
+    while True:
         arg = func(arg)
+        yield arg
 
 def tail(n, iterable):
     "Return an iterator over the last n items"

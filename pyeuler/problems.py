@@ -586,3 +586,15 @@ def problem54():
     with open("poker.txt", "r") as f:
         rows = f.readlines()
         return sum(compare(*players(row.split())) for row in rows)
+
+def problem55():
+    """If we take 47, reverse and add, 47 + 74 = 121, which is
+    palindromic. A number that never forms a palindrome through the
+    reverse and add process is called a Lychrel number. How many
+    Lychrel numbers are there below ten-thousand? (Only consider fifty
+    iterations)"""
+    def is_lychrel(num):
+        reverse = lambda x: num_from_digits(digits_from_num(x)[::-1])
+        iterations = repeatfunc(lambda x: x + reverse(x), num)
+        return not any(is_palindromic(n) for n in take(50, iterations))
+    return quantify(range(1, 10000), pred=is_lychrel)
