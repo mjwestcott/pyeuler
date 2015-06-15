@@ -579,8 +579,7 @@ def problem54():
                            3 if threeofakind(hand) else
                            2 if twopair(hand) else
                            1 if onepair(hand) else
-                           0),
-                          ranks(hand)) # to break ties
+                           0), ranks(hand))
     compare = lambda hand1, hand2: 1 if max((hand1, hand2), key=value) == hand1 else 0
     players = lambda row: (row[:5], row[5:])
     with open("poker.txt", "r") as f:
