@@ -547,22 +547,26 @@ def problem53():
                  if C(n, r) > 1e6)
 
 def problem54():
-    """The file, poker.txt, contains one-thousand random hands dealt to two
-    players. How many hands does Player 1 win?"""
-    suits = lambda hand: [h[1] for h in hand]
-    ranks = lambda hand: [h[0] for h in hand]
-    # convert string representations of ranks
-    convert = {'A': 14, 'K': 13, 'Q': 12, 'J': 11, 'T': 10}
-    ranks = compose(lambda lst: sorted([convert[x] if x in convert else int(x)
-                                        for x in lst], reverse=True),
-                    ranks)
-    # aces may play high or low for the purpose of making a straight
-    ranks = compose(lambda lst: lst if lst != [14, 5, 4, 3, 2] else [5, 4, 3, 2, 1],
-                    ranks)
-    # for the purpose of valuation, ranks should be ordered foremost by count
-    ranks = compose(lambda lst: sorted(lst, key=lambda x: lst.count(x), reverse=True),
-                    ranks)
-    # group([5, 5, 10, 10, 13]) --> [2, 2, 1]
+    def suits(hand):
+        return [h[1] for h in hand]
+    def ranks(hand):
+        # Convert the first element of each string into an int.
+        # Then sort it in descending order.
+        # If the ace should play low, change its rank from 14 to 1.
+        # Finally, put the elements with the highest count at the start.
+        # This allows us to break ties between hands with the same class of hand,
+        # e.g. a pair of nines vs a pair of eights:
+        # ranks(['AC', '8D', '8H', '3S', '2S']) --> [8, 8, 14, 3, 2]
+        # ranks(['KC', '9D', '9H', '3C', '2C']) --> [9, 9, 13, 3, 2]
+        # Note that a normal descending sort would mean the first hand > second
+        # hand, as 14 > 13, but we want the second hand to win as the rank
+        # of the pair is the primary determinant.
+        trans = {'A': 14, 'K': 13, 'Q': 12, 'J': 11, 'T': 10}
+        convert = lambda lst: [trans[x] if x in trans else int(x) for x in lst]
+        revsorted = lambda lst: sorted(lst, reverse=True)
+        modify_ace = lambda lst: lst if lst != [14, 5, 4, 3, 2] else [5, 4, 3, 2, 1]
+        sort_by_count = lambda lst: sorted(lst, key=lambda x: lst.count(x), reverse=True)
+        return fmap([convert, revsorted, modify_ace, sort_by_count], [h[0] for h in hand])
     group = lambda ranks: sorted(collections.Counter(ranks).values(), reverse=True)
     straightflush = lambda hand: flush(hand) and straight(hand)
     fourofakind = lambda hand: group(ranks(hand)) == [4, 1]
@@ -582,7 +586,8 @@ def problem54():
                            3 if threeofakind(hand) else
                            2 if twopair(hand) else
                            1 if onepair(hand) else
-                           0), ranks(hand))
+                           0),
+                          ranks(hand)) # to break ties
     compare = lambda hand1, hand2: 1 if max((hand1, hand2), key=value) == hand1 else 0
     players = lambda row: (row[:5], row[5:])
     with open("poker.txt", "r") as f:

@@ -85,6 +85,13 @@ def compose(f, g):
         return f(g(*args, **kwargs))
     return _wrapper
 
+def fmap(flist, arg):
+    "Apply each function in flist to the arg"
+    result = arg
+    for f in flist:
+        result = f(result)
+    return result
+
 def iterate(func, arg):
     """After Haskell's iterate: apply function repeatedly."""
     # not functional
