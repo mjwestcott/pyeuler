@@ -301,7 +301,7 @@ def problem34():
     # condition is in this case harder to apply.
     upper_bound = first(n*dfactorials[9] for n in count(1) if n*dfactorials[9] < 10**n)
     return sum(x for x in range(3, upper_bound)
-        if x == sum(dfactorials[d] for d in digits_from_num_fast(x)))
+                 if x == sum(dfactorials[d] for d in digits_from_num_fast(x)))
 
 def problem35():
     """How many circular primes are there below one million?"""
@@ -321,7 +321,8 @@ def problem36():
     # Apply a basic constraint: a binary number starts with 1, and to be
     # palindromic it must also end with 1, so candidates are odd numbers.
     return sum(x for x in range(1, int(1e6), 2)
-        if is_palindromic(x, base=10) and is_palindromic(x, base=2))
+                 if is_palindromic(x, base=10)
+                 and is_palindromic(x, base=2))
 
 def problem37():
     """Find the sum of the only eleven primes that are both truncatable from
@@ -355,7 +356,7 @@ def problem39():
     maximized?"""
     def get_sides_for_perimeter(perimeter):
         sides = ((perimeter-b-c, b, c) for b in range(1, perimeter//2 + 1)
-            for c in range(b, perimeter//2 + 1))
+                                       for c in range(b, perimeter//2 + 1))
         return ((a, b, c) for (a, b, c) in sides if a**2 == b**2 + c**2)
     # Brute-force, check pythagorian triplets for a better solution
     return max(range(120, 1000), key=compose(ilen, get_sides_for_perimeter))
@@ -373,7 +374,7 @@ def problem40():
     # We could get a formula for dn, but brute-force is fast enough
     indexes = set([1, 10, 100, 1000, 10000, 100000, 1000000])
     decimals = (d for (idx, d) in enumerate(flatten(count_digits()), 1)
-                if idx in indexes)
+                  if idx in indexes)
     return product(take(len(indexes), decimals))
 
 def problem41():
@@ -381,8 +382,9 @@ def problem41():
     # Use the disibility by 3 rule to filter some candidates: if the sum of
     # digits is divisible by 3, so is the number (then it can't be prime).
     maxdigits = first(x for x in range(9, 1, -1) if sum(range(1, x+1)) % 3)
-    candidates = (num_from_digits(digits) for ndigits in range(maxdigits, 1, -1)
-        for digits in permutations(range(ndigits, 0, -1), ndigits))
+    candidates = (num_from_digits(digits)
+                  for ndigits in range(maxdigits, 1, -1)
+                  for digits in permutations(range(ndigits, 0, -1), ndigits))
     return first(x for x in candidates if is_prime(x))
 
 def problem42():
