@@ -550,17 +550,10 @@ def problem54():
     def suits(hand):
         return [h[1] for h in hand]
     def ranks(hand):
-        # Convert the first element of each string into an int.
-        # Then sort it in descending order.
-        # If the ace should play low, change its rank from 14 to 1.
-        # Finally, put the elements with the highest count at the start.
-        # This allows us to break ties between hands with the same class of hand,
-        # e.g. a pair of nines vs a pair of eights:
-        # ranks(['AC', '8D', '8H', '3S', '2S']) --> [8, 8, 14, 3, 2]
-        # ranks(['KC', '9D', '9H', '3C', '2C']) --> [9, 9, 13, 3, 2]
-        # Note that a normal descending sort would mean the first hand > second
-        # hand, as 14 > 13, but we want the second hand to win as the rank
-        # of the pair is the primary determinant.
+        # hand1 = ranks(['AC', '8D', '8H', '3S', '2S']) --> [8, 8, 14, 3, 2]
+        # hand2 = ranks(['KC', '9D', '9H', '3C', '2C']) --> [9, 9, 13, 3, 2]
+        # Note that the hand is first sorted in descending order, then sorted
+        # by count. This allows us to correctly judge that hand2 > hand1.
         trans = {'A': 14, 'K': 13, 'Q': 12, 'J': 11, 'T': 10}
         convert = lambda lst: [trans[x] if x in trans else int(x) for x in lst]
         revsorted = lambda lst: sorted(lst, reverse=True)
