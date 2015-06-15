@@ -514,7 +514,7 @@ def problem51():
         """Replace digits in num with val at indicies specified by the mask.
         If result leads with a zero, return a sentinel value (-1)."""
         # replace_digits(3537, [1, 1, 0, 0], 9) --> 9937
-        apply_mask = lambda x, y: val if y else x
+        apply_mask = lambda original, masked: original if not masked else val
         digits = list(map(apply_mask, digits_from_num_fast(num), mask))
         return num_from_digits(digits) if digits[0] != 0 else -1
     # For each prime above 56995, for all possible binary masks
