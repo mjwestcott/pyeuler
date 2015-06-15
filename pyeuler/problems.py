@@ -547,6 +547,8 @@ def problem53():
                  if C(n, r) > 1e6)
 
 def problem54():
+    """The file, poker.txt, contains one-thousand random hands dealt to two
+    players. How many hands does Player 1 win?"""
     def suits(hand):
         return [h[1] for h in hand]
     def ranks(hand):
