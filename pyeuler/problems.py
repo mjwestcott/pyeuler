@@ -532,10 +532,9 @@ def problem51():
 def problem52():
     """Find the smallest positive integer, x, such that 2x, 3x, 4x, 5x, and 6x,
     contain the same digits."""
-    num_digits = compose(ilen, digits_from_num_fast)
     multiples = lambda x: (i*x for i in range(2, 7))
     same_digits = lambda n, m: (all(d in digits_from_num(m) for d in digits_from_num(n))
-                                and num_digits(n) == num_digits(m))
+                                and number_of_digits(n) == number_of_digits(m))
     return first(n for n in count(1) if all(same_digits(n, m) for m in multiples(n)))
 
 def problem53():
