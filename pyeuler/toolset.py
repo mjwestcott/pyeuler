@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import collections
 import operator
+from fractions import Fraction
 from functools import reduce, partial
 from math import sqrt, log, log10, ceil
 from itertools import (accumulate, chain, combinations,
