@@ -1,20 +1,22 @@
 #!/usr/bin/python
 import collections
 import operator
-from functools import reduce
+from functools import reduce, partial
 from math import sqrt, log, log10, ceil
-from itertools import (accumulate, chain, combinations, compress, count, cycle,
-                       dropwhile, filterfalse, groupby, islice, permutations,
-                       repeat, starmap, takewhile, tee, zip_longest,
+from itertools import (accumulate, chain, combinations,
+                       compress, count, cycle,
+                       dropwhile, filterfalse, groupby,
+                       islice, permutations, repeat,
+                       starmap, takewhile, tee, zip_longest,
                        product as cartesian_product)
 
 def take(n, iterable):
     """Take first n elements from iterable"""
     return islice(iterable, n)
 
-def nth(iterable, n, default=None):
-    "Returns the nth item or a default value"
-    return next(islice(iterable, n, None), default)
+def take_every(n, iterable):
+    """Take an element from iterable every n elements"""
+    return islice(iterable, 0, None, n)
 
 def first(iterator):
     """Take first element in the iterator"""
@@ -32,37 +34,58 @@ def first_true(iterable, default=False, pred=None):
     # first_true([a,b], x, f) --> a if f(a) else b if f(b) else x
     return next(filter(pred, iterable), default)
 
+def tail(n, iterable):
+    "Return an iterator over the last n items"
+    # tail(3, 'ABCDEFG') --> E F G
+    return iter(collections.deque(iterable, maxlen=n))
+
+def all_tails(seq):
+    "Yield last n, n-1, n-2, ..., items, where n = len(seq)."
+    # all_tails([1,2,3]) --> [1,2,3], [2,3], [3], []
+    for idx in range(len(seq)+1):
+        yield seq[idx:]
+
 def last(iterable):
     """Take last element in the iterable"""
     return reduce(lambda x, y: y, iterable)
 
-def take_every(n, iterable):
-    """Take an element from iterable every n elements"""
-    return islice(iterable, 0, None, n)
+def nth(iterable, n, default=None):
+    "Returns the nth item or a default value"
+    return next(islice(iterable, n, None), default)
 
 def drop(n, iterable):
     """Drop n elements from iterable and return the rest"""
     return islice(iterable, n, None)
 
-def ilen(iterable):
-    """Return length (exhausts an iterator)"""
-    return sum(1 for _ in iterable)
+def consume(iterator, n):
+    "Advance the iterator n-steps ahead. If n is none, consume entirely."
+    # Use functions that consume iterators at C speed.
+    if n is None:
+        # feed the entire iterator into a zero-length deque
+        collections.deque(iterator, maxlen=0)
+    else:
+        # advance to the empty slice starting at position n
+        next(islice(iterator, n, n), None)
 
 def product(nums):
     """Product of nums"""
     return reduce(operator.mul, nums, 1)
 
-def irange(start_or_end, optional_end=None):
-    """Return iterator that counts from start to end (both included)."""
-    if optional_end is None:
-        start, end = 0, start_or_end
-    else:
-        start, end = start_or_end, optional_end
-    return take(max(end - start + 1, 0), count(start))
-
 def flatten(lstlsts):
     """Flatten a list of lists"""
     return (b for a in lstlsts for b in a)
+
+def partition(pred, iterable):
+    "Use a predicate to partition entries into false entries and true entries"
+    # partition(is_odd, range(10)) --> 0 2 4 6 8   and  1 3 5 7 9
+    t1, t2 = tee(iterable)
+    return filterfalse(pred, t1), filter(pred, t2)
+
+def pairwise(iterable):
+    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+    a, b = tee(iterable)
+    next(b, None)
+    return zip(a, b)
 
 def compact(iterable):
     """Filter None values from an iterable"""
@@ -91,16 +114,17 @@ def repeatfunc(func, arg):
         arg = func(arg)
         yield arg
 
-def tail(n, iterable):
-    "Return an iterator over the last n items"
-    # tail(3, 'ABCDEFG') --> E F G
-    return iter(collections.deque(iterable, maxlen=n))
+def ilen(iterable):
+    """Return length (exhausts an iterator)"""
+    return sum(1 for _ in iterable)
 
-def all_tails(seq):
-    "Yield last n, n-1, n-2, ..., items, where n = len(seq)."
-    # all_tails([1,2,3]) --> [1,2,3], [2,3], [3], []
-    for idx in range(len(seq)+1):
-        yield seq[idx:]
+def irange(start_or_end, optional_end=None):
+    """Return iterator that counts from start to end (both included)."""
+    if optional_end is None:
+        start, end = 0, start_or_end
+    else:
+        start, end = start_or_end, optional_end
+    return take(max(end - start + 1, 0), count(start))
 
 def ireduce(func, iterable, init=None):
     """Like reduce() but using iterators (a.k.a scanl)"""
@@ -254,27 +278,27 @@ def get_cardinal_name(num):
         15: "fifteen", 16: "sixteen", 17: "seventeen", 18: "eighteen",
         19: "nineteen", 20: "twenty", 30: "thirty", 40: "forty",
         50: "fifty", 60: "sixty", 70: "seventy", 80: "eighty", 90: "ninety",
-      }
+    }
     def _get_tens(n):
-      a, b = divmod(n, 10)
-      return (numbers[n] if (n in numbers) else "%s-%s" % (numbers[10*a], numbers[b]))
+        a, b = divmod(n, 10)
+        return (numbers[n] if (n in numbers) else "%s-%s" % (numbers[10*a], numbers[b]))
     def _get_hundreds(n):
-      tens = n % 100
-      hundreds = (n // 100) % 10
-      return list(compact([
-        hundreds > 0 and numbers[hundreds],
-        hundreds > 0 and "hundred",
-        hundreds > 0 and tens and "and",
-        (not hundreds or tens > 0) and _get_tens(tens),
-      ]))
+        tens = n % 100
+        hundreds = (n // 100) % 10
+        return list(compact([
+            hundreds > 0 and numbers[hundreds],
+            hundreds > 0 and "hundred",
+            hundreds > 0 and tens and "and",
+            (not hundreds or tens > 0) and _get_tens(tens),
+        ]))
 
     # This needs some refactoring
     if not (0 <= num < 1e6):
-      raise ValueError("value not supported: %s" % num)
+        raise ValueError("value not supported: %s" % num)
     thousands = (num // 1000) % 1000
     strings = compact([
-      thousands and (_get_hundreds(thousands) + ["thousand"]),
-      (num % 1000 or not thousands) and _get_hundreds(num % 1000),
+        thousands and (_get_hundreds(thousands) + ["thousand"]),
+        (num % 1000 or not thousands) and _get_hundreds(num % 1000),
     ])
     return " ".join(flatten(strings))
 
