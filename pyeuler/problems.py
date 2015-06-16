@@ -600,3 +600,11 @@ def problem55():
         iterations = repeatfunc(lambda x: x + reverse(x), num)
         return not any(is_palindromic(n) for n in take(50, iterations))
     return quantify(range(1, 10000), pred=is_lychrel)
+
+def problem56():
+    """Considering natural numbers of the form, a**b, where a, b < 100,
+    what is the maximum digital sum?"""
+    def digit_sum(n):
+        return sum(digits_from_num(n))
+    return max(digit_sum(a**b) for a in range(100)
+                               for b in range(100))
