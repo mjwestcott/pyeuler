@@ -562,7 +562,7 @@ def problem54():
         revsorted = lambda lst: sorted(lst, reverse=True)
         modify_ace = lambda lst: lst if lst != [14, 5, 4, 3, 2] else [5, 4, 3, 2, 1]
         sort_by_count = lambda lst: sorted(lst, key=lambda x: lst.count(x), reverse=True)
-        return fmap([convert, revsorted, modify_ace, sort_by_count], [h[0] for h in hand])
+        return sort_by_count(modify_ace(revsorted(convert([h[0] for h in hand]))))
     group = lambda ranks: sorted(collections.Counter(ranks).values(), reverse=True)
     straightflush = lambda hand: flush(hand) and straight(hand)
     fourofakind = lambda hand: group(ranks(hand)) == [4, 1]
