@@ -632,3 +632,43 @@ def problem57():
     generate_tails = repeatfunc(tail, 2)
     expansions = (1 + Fraction(1, t) for t in generate_tails)
     return quantify(take(1000, expansions), pred=check_numerator)
+
+def problem58():
+    """Starting with 1 and spiralling anticlockwise in the following
+    way, a square spiral with side length 7 is formed.
+
+        37 36 35 34 33 32 31
+        38 17 16 15 14 13 30
+        39 18  5  4  3 12 29
+        40 19  6  1  2 11 28
+        41 20  7  8  9 10 27
+        42 21 22 23 24 25 26
+        43 44 45 46 47 48 49
+
+    It is interesting to note that the odd squares lie along the bottom
+    right diagonal, but what is more interesting is that 8 out of the 13
+    numbers lying along both diagonals are prime; that is, a ratio of 8/13
+    ≈ 62%.
+
+    If one complete new layer is wrapped around the spiral above, a square
+    spiral with side length 9 will be formed. If this process is
+    continued, what is the side length of the square spiral for which the
+    ratio of primes along both diagonals first falls below 10%?"""
+    def side_length(num):
+        "Given the bottom right corner number, returns the square length"
+        return int(num**0.5)
+    def get_corners(num):
+        "Given the bottom right corner number, returns the four corner numbers"
+        return list(take(4, take_every(side_length(num)-1, range(num, 1, -1))))
+    # Yields all four corners from each new layer, starting at fifth layer.
+    # next(corners) --> [81, 73, 65, 57], [121, 111, 101, 91], ...
+    corners = (get_corners(x**2) for x in count(start=9, step=2))
+    @tail_recursive
+    def process_layer(new_corners, primes, total):
+        primes += quantify(new_corners, pred=is_prime)
+        total += len(new_corners)
+        if primes/total < 0.10:
+            # new_corners[0] is the bottom right corner number
+            return side_length(new_corners[0])
+        return process_layer(next(corners), primes, total)
+    return process_layer(next(corners), 8, 13)
