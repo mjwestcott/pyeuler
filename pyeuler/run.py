@@ -65,10 +65,11 @@ def main(args):
     solutions = (options.solutions_file and
         dict(parse_solutions(open(options.solutions_file))))
     tosolve = list(map(int, args0))
-    problem_functions = dict((int(re.match("problem(\d+)$", s).group(1)), fun)
-        for (s, fun) in chain(*[inspect.getmembers(p)
-                                for p in [problems1_50, problems51_100]])
-                                if s.startswith("problem"))
+    problem_modules = [problems1_50, problems51_100]
+    problem_functions = dict(
+        (int(re.match("problem(\d+)$", s).group(1)), fun)
+        for (s, fun) in chain(*[inspect.getmembers(p) for p in problem_modules])
+        if s.startswith("problem"))
 
     itime = time.time()
     statuses = [run_problem(num, fun, solutions) for (num, fun) in
