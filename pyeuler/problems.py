@@ -673,3 +673,27 @@ def problem58():
             return side_length(new_corners[0])
         return process_layer(next(corners), primes, total)
     return process_layer(next(corners), 8, 13)
+
+def problem59():
+    """A modern encryption method is to take a text file, convert the bytes to
+    ASCII, then XOR each byte with a given value, taken from a secret key. The
+    advantage with the XOR function is that using the same encryption key on
+    the cipher text, restores the plain text; for example, 65 XOR 42 = 107,
+    then 107 XOR 42 = 65. One method is to use a password as a key. If the
+    password is shorter than the message, which is likely, the key is repeated
+    cyclically throughout the message. Your task has been made easy, as the
+    encryption key consists of three lower case characters. Using cipher.txt, a
+    file containing the encrypted ASCII codes, and the knowledge that the plain
+    text must contain common English words, decrypt the message and find the
+    sum of the ASCII values in the original text."""
+    def decrypt(cipher, start=0, n=3):
+        """Given a list of ints (cipher), finds the most common item of the
+        sublist starting at given index (start), and taking every nth element.
+        We assume this item is an int representing the ordinal value of the
+        space character, so return item XOR ord(' ')"""
+        item, _ = collections.Counter(cipher[start::n]).most_common()[0]
+        return item ^ ord(' ')
+    with open("cipher.txt", "r") as f:
+        cipher = [int(x) for x in f.read().split(',')]
+        key = [decrypt(cipher, start=i) for i in range(3)]
+    return sum(c ^ k for c, k in zip(cipher, cycle(key)))
