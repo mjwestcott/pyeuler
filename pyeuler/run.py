@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
-Run Project Euler problems in functional-programming style.
+Project Euler problems solved in Python 3 in a functional programming style.
 
     $ wget http://projecteuler-solutions.googlecode.com/svn/trunk/Solutions.txt
 
@@ -14,8 +14,10 @@ Run Project Euler problems in functional-programming style.
     5: 232792560 (ok) in 0.0000 seconds
     9: 31875000 (ok) in 0.1019 seconds
 
-Author: Arnau Sanchez <tokland@gmail.com>
-Website: http://github.com/tokland/pyeuler
+Original author:
+    Arnau Sanchez <tokland@gmail.com> (http://github.com/tokland/pyeuler)
+Updated to Python 3 and edited by:
+    Matt Westcott <m.westcott@gmail.com> (http://mattwestcott.co.uk)
 """
 import optparse
 import inspect

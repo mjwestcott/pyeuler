@@ -1,3 +1,10 @@
+#!/usr/bin/python
+"""
+Project Euler problems solved in Python 3 in a functional programming style.
+
+Author:
+    Matt Westcott <m.westcott@gmail.com> (http://mattwestcott.co.uk)
+"""
 from toolset import *
 
 def problem51():

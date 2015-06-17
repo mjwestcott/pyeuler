@@ -1,4 +1,12 @@
 #!/usr/bin/python
+"""
+Project Euler problems solved in Python 3 in a functional programming style.
+
+Original author:
+    Arnau Sanchez <tokland@gmail.com> (http://github.com/tokland/pyeuler)
+Updated to Python 3 and edited by:
+    Matt Westcott <m.westcott@gmail.com> (http://mattwestcott.co.uk)
+"""
 import string
 
 import data
