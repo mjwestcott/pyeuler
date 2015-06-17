@@ -157,10 +157,6 @@ def occurrences(it, exchange=False):
     """Return dictionary with occurrences from iterable"""
     return reduce(lambda occur, x: dict(occur, **{x: occur.get(x, 0) + 1}), it, {})
 
-def ncombinations(n, k):
-    """Combinations of k elements from a group of n"""
-    return cartesian_product(range(n-k+1, n+1)) / factorial(k)
-
 def combinations_with_replacement(iterable, r):
     """combinations_with_replacement('ABC', 2) --> AA AB AC BB BC CC"""
     pool = tuple(iterable)
