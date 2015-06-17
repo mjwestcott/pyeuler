@@ -668,7 +668,7 @@ def problem58():
     def process_layer(new_corners, primes, total):
         primes += quantify(new_corners, pred=is_prime)
         total += len(new_corners)
-        if primes/total < 0.10:
+        if (primes / total) < 0.10:
             # new_corners[0] is the bottom right corner number
             return side_length(new_corners[0])
         return process_layer(next(corners), primes, total)
