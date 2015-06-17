@@ -22,8 +22,10 @@ import inspect
 import time
 import sys
 import re
+from itertools import chain
 
-import problems
+import problems1_50
+import problems51_100
 
 def run_problem(number, function, solutions=None):
     """Run a problem and return boolean state (None if no solution available)."""
@@ -64,7 +66,9 @@ def main(args):
         dict(parse_solutions(open(options.solutions_file))))
     tosolve = list(map(int, args0))
     problem_functions = dict((int(re.match("problem(\d+)$", s).group(1)), fun)
-        for (s, fun) in inspect.getmembers(problems) if s.startswith("problem"))
+        for (s, fun) in chain(*[inspect.getmembers(p)
+                                for p in [problems1_50, problems51_100]])
+                                if s.startswith("problem"))
 
     itime = time.time()
     statuses = [run_problem(num, fun, solutions) for (num, fun) in
