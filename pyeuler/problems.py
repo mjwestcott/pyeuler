@@ -723,13 +723,17 @@ def problem60():
         # We limit the search space by considering only those new primes which
         # can be concatenated with the current set to make a prime.
         for a in ps:
-            bs = [b for b in ps if (b > a) and concats_to_prime(a, b)]
+            bs = [b for b in ps if (b > a)
+                  and concats_to_prime(a, b)]
             for b in bs:
-                cs = [c for c in bs if (c > b) and all_concat_to_prime([a, b, c])]
+                cs = [c for c in bs if (c > b)
+                      and all_concat_to_prime([a, b, c])]
                 for c in cs:
-                    ds = [d for d in cs if (d > c) and all_concat_to_prime([a, b, c, d])]
+                    ds = [d for d in cs if (d > c)
+                          and all_concat_to_prime([a, b, c, d])]
                     for d in ds:
-                        es = [e for e in ds if (e > d) and all_concat_to_prime([a, b, c, d, e])]
+                        es = [e for e in ds if (e > d)
+                              and all_concat_to_prime([a, b, c, d, e])]
                         for e in es:
                             return sum([a, b, c, d, e])
     return find_candidate()
