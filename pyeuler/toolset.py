@@ -333,32 +333,29 @@ def memoize(f, maxcache=None, cache={}):
 
 class tail_recursive(object):
     """Tail recursive decorator."""
-    # Michele Simionato's version
-    CONTINUE = object() # sentinel
-
+    # George Sakkis's version: http://code.activestate.com/recipes/496691/#c3
     def __init__(self, func):
         self.func = func
         self.firstcall = True
+        self.CONTINUE = object()
 
     def __call__(self, *args, **kwd):
-        try:
-            if self.firstcall: # start looping
-                self.firstcall = False
+        if self.firstcall:
+            func = self.func
+            CONTINUE = self.CONTINUE
+            self.firstcall = False
+            try:
                 while True:
-                    result = self.func(*args, **kwd)
-                    if result is self.CONTINUE: # update arguments
+                    result = func(*args, **kwd)
+                    if result is CONTINUE: # update arguments
                         args, kwd = self.argskwd
                     else: # last call
-                        break
-            else: # return the arguments of the tail call
-                self.argskwd = args, kwd
-                return self.CONTINUE
-        except: # reset and re-raise
-            self.firstcall = True
-            raise
-        else: # reset and exit
-            self.firstcall = True
-            return result
+                        return result
+            finally:
+                self.firstcall = True
+        else: # return the arguments of the tail call
+            self.argskwd = args, kwd
+            return self.CONTINUE
 
 class persistent(object):
     def __init__(self, it):
