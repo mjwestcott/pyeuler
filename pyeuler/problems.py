@@ -488,8 +488,9 @@ def problem50():
         if sum(take(max_length, drop(n, primes))) >= 1e6:
             return acc
         accsums = takewhile(lambda acc: acc<1e6, accumulate(drop(n, primes)))
-        new_max_length, new_acc = max((idx, acc) for (idx, acc) in
-            enumerate(accsums) if is_prime(acc))
+        new_max_length, new_acc = max((idx, acc)
+                                      for (idx, acc) in enumerate(accsums)
+                                      if is_prime(acc))
         if new_max_length > max_length:
             return get_max_length(primes, n+1, new_max_length, new_acc)
         else:
