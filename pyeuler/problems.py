@@ -697,3 +697,39 @@ def problem59():
         cipher = [int(x) for x in f.read().split(',')]
         key = [decrypt(cipher, start=i) for i in range(3)]
     return sum(c ^ k for c, k in zip(cipher, cycle(key)))
+
+def problem60():
+    """The primes 3, 7, 109, and 673, are quite remarkable. By taking any two
+    primes and concatenating them in any order the result will always be prime.
+    For example, taking 7 and 109, both 7109 and 1097 are prime. The sum of
+    these four primes, 792, represents the lowest sum for a set of four primes
+    with this property. Find the lowest sum for a set of five primes for which
+    any two primes concatenate to produce another prime."""
+    def primes_less_than(n):
+        return persistent(takewhile(lambda x: x<n, get_primes()))
+    def concats_to_prime(x, y):
+        "Tests whether concatenating x and y in either order makes a prime"
+        dgts = compose(list, digits_from_num_fast)
+        return (is_prime(num_from_digits(dgts(x) + dgts(y)))
+                and is_prime(num_from_digits(dgts(y) + dgts(x))))
+    def all_concat_to_prime(lst):
+        "Tests whether concats_to_prime is True for all two-length combos of lst"
+        return all(concats_to_prime(x, y) for x in lst for y in lst if x != y)
+    # Its not clear how many prime numbers to search through.
+    # Running first_true(find_candidate(n) for n in count(start=0, step=1000))
+    # suggests 9000.
+    def find_candidate(largest_prime=9000):
+        ps = primes_less_than(largest_prime)
+        # We limit the search space by considering only those new primes which
+        # can be concatenated with the current set to make a prime.
+        for a in ps:
+            bs = [b for b in ps if (b > a) and concats_to_prime(a, b)]
+            for b in bs:
+                cs = [c for c in bs if (c > b) and all_concat_to_prime([a, b, c])]
+                for c in cs:
+                    ds = [d for d in cs if (d > c) and all_concat_to_prime([a, b, c, d])]
+                    for d in ds:
+                        es = [e for e in ds if (e > d) and all_concat_to_prime([a, b, c, d, e])]
+                        for e in es:
+                            return sum([a, b, c, d, e])
+    return find_candidate()
