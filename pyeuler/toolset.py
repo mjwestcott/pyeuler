@@ -1,9 +1,11 @@
 #!/usr/bin/python
 import collections
+import heapq
 import operator
+
+from math import sqrt, log, log10, ceil
 from fractions import Fraction
 from functools import reduce, partial
-from math import sqrt, log, log10, ceil
 from itertools import (accumulate, chain, combinations,
                        compress, count, cycle,
                        dropwhile, filterfalse, groupby,
