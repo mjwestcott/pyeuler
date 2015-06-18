@@ -341,6 +341,22 @@ def memoize(f, maxcache=None, cache={}):
         return cache[key]
     return g
 
+class memoize_mutable:
+    """Memoize functions with mutable arguments."""
+    # Attributed to Alex Martelli: http://stackoverflow.com/a/4669720
+    def __init__(self, fn):
+        self.fn = fn
+        self.memo = {}
+    def __call__(self, *args, **kwds):
+        import pickle
+        str = pickle.dumps(args, 1) + pickle.dumps(kwds, 1)
+        if str not in self.memo:
+            # print("miss")  # DEBUG INFO
+            self.memo[str] = self.fn(*args, **kwds)
+        # else:
+            # print("hit")  # DEBUG INFO
+        return self.memo[str]
+
 class tail_recursive(object):
     """Tail recursive decorator."""
     # George Sakkis's version: http://code.activestate.com/recipes/496691/#c3

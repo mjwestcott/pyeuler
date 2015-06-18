@@ -214,35 +214,30 @@ def problem60():
     these four primes, 792, represents the lowest sum for a set of four primes
     with this property. Find the lowest sum for a set of five primes for which
     any two primes concatenate to produce another prime."""
-    def primes_less_than(n):
-        return persistent(takewhile(lambda x: x<n, get_primes()))
+    @memoize
     def concats_to_prime(x, y):
         "Tests whether concatenating x and y in either order makes a prime"
-        dgts = compose(list, digits_from_num_fast)
-        return (is_prime(num_from_digits(dgts(x) + dgts(y)))
-                and is_prime(num_from_digits(dgts(y) + dgts(x))))
-    def all_concat_to_prime(lst):
-        "Tests whether concats_to_prime is True for all two-length combos of lst"
-        return all(concats_to_prime(x, y) for x in lst for y in lst if x != y)
+        digits = compose(list, digits_from_num_fast)
+        check = lambda x, y: is_prime(num_from_digits(digits(x) + digits(y)))
+        return check(x, y) and check(y, x)
+    def all_concat_to_prime(*candidates):
+        return all(concats_to_prime(x, y)
+                   for x in candidates for y in candidates if x != y)
+    def filter_each(candidates, primes):
+        return [x for x in primes if (all_concat_to_prime(x, *candidates)
+                                      and x > max(candidates))]
+    def primes_less_than(n):
+        return persistent(takewhile(lambda x: x < n, get_primes()))
     # Its not clear how many prime numbers to search through.
     # Running first_true(find_candidate(n) for n in count(start=0, step=1000))
     # suggests 9000.
     def find_candidate(largest_prime=9000):
-        ps = primes_less_than(largest_prime)
-        # We limit the search space by considering only those new primes which
-        # can be concatenated with the current set to make a prime.
-        for a in ps:
-            bs = [b for b in ps if (b > a)
-                  and concats_to_prime(a, b)]
-            for b in bs:
-                cs = [c for c in bs if (c > b)
-                      and all_concat_to_prime([a, b, c])]
-                for c in cs:
-                    ds = [d for d in cs if (d > c)
-                          and all_concat_to_prime([a, b, c, d])]
-                    for d in ds:
-                        es = [e for e in ds if (e > d)
-                              and all_concat_to_prime([a, b, c, d, e])]
-                        for e in es:
-                            return sum([a, b, c, d, e])
+        primes = primes_less_than(largest_prime)
+        return next(sum([a, b, c, d, e])
+                    for a in primes
+                    for b in filter_each([a], primes)
+                    for c in filter_each([a, b], primes)
+                    for d in filter_each([a, b, c], primes)
+                    for e in filter_each([a, b, c, d], primes))
     return find_candidate()
+
