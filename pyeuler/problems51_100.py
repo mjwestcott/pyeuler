@@ -264,6 +264,7 @@ def problem61():
     cyclic 4-digit numbers for which each polygonal type: triangle,
     square, pentagonal, hexagonal, heptagonal, and octagonal, is
     represented by a different number in the set."""
+    @memoize
     def is_cyclic(x, y):
         return digits_from_num(x)[2:] == digits_from_num(y)[:2]
     def make_poly(*polygons):
