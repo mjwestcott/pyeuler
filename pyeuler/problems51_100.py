@@ -42,12 +42,14 @@ def problem51():
 def problem52():
     """Find the smallest positive integer, x, such that 2x, 3x, 4x, 5x, and 6x,
     contain the same digits."""
-    multiples = lambda x: (i*x for i in range(2, 6+1))
-    # Check that all digits in the first number are in the second,
-    # and that they have the same number of digits.
-    same_digits = lambda n, m: (all(d in digits_from_num(m) for d in digits_from_num(n))
-                                and number_of_digits(n) == number_of_digits(m))
-    return first(n for n in count(1) if all(same_digits(n, m) for m in multiples(n)))
+    def multiples(x):
+        return [i*x for i in range(2, 6+1)]
+    def same_digits(x, y):
+        """Check that all digits in the first number are in the second,
+        and that they have the same number of digits."""
+        return (all(d in digits_from_num(y) for d in digits_from_num(x))
+                and number_of_digits(x) == number_of_digits(y))
+    return first(x for x in count(1) if all(same_digits(x, y) for y in multiples(x)))
 
 def problem53():
     """How many, not necessarily distinct, values of nCr, for 1 ≤ n ≤ 100, are
@@ -73,28 +75,31 @@ def problem54():
         modify_ace = lambda lst: lst if lst != [14, 5, 4, 3, 2] else [5, 4, 3, 2, 1]
         sort_by_count = lambda lst: sorted(lst, key=lambda x: lst.count(x), reverse=True)
         return sort_by_count(modify_ace(revsorted(convert([h[0] for h in hand]))))
-    group = lambda ranks: sorted(collections.Counter(ranks).values(), reverse=True)
-    straightflush = lambda hand: flush(hand) and straight(hand)
-    fourofakind = lambda hand: group(ranks(hand)) == [4, 1]
-    fullhouse = lambda hand: group(ranks(hand)) == [3, 2]
-    flush = lambda hand: len(set(suits(hand))) == 1
-    straight = lambda hand: ((max(ranks(hand)) - min(ranks(hand)) == 4)
-                             and group(ranks(hand)) == [1, 1, 1, 1, 1])
-    threeofakind = lambda hand: group(ranks(hand)) == [3, 1, 1]
-    twopair = lambda hand: group(ranks(hand)) == [2, 2, 1]
-    onepair = lambda hand: group(ranks(hand)) == [2, 1, 1, 1]
-    # Return a value for the hand and its ranks to break ties
-    value = lambda hand: ((8 if straightflush(hand) else
-                           7 if fourofakind(hand) else
-                           6 if fullhouse(hand) else
-                           5 if flush(hand) else
-                           4 if straight(hand) else
-                           3 if threeofakind(hand) else
-                           2 if twopair(hand) else
-                           1 if onepair(hand) else
-                           0), ranks(hand))
-    compare = lambda hand1, hand2: 1 if max((hand1, hand2), key=value) == hand1 else 0
-    players = lambda row: (row[:5], row[5:])
+    def group(ranks): return sorted(collections.Counter(ranks).values(), reverse=True)
+    def onepair(hand): return group(ranks(hand)) == [2, 1, 1, 1]
+    def twopair(hand): return group(ranks(hand)) == [2, 2, 1]
+    def threeofakind(hand): return group(ranks(hand)) == [3, 1, 1]
+    def fourofakind(hand): return group(ranks(hand)) == [4, 1]
+    def fullhouse(hand): return group(ranks(hand)) == [3, 2]
+    def straightflush(hand): return (flush(hand) and straight(hand))
+    def flush(hand): return len(set(suits(hand))) == 1
+    def straight(hand): return ((max(ranks(hand)) - min(ranks(hand)) == 4)
+                                and len(set(group(ranks(hand))))) == 1
+    def value(hand):
+        "Return a value for the hand and its ranks to break ties"
+        return ((8 if straightflush(hand) else
+                 7 if fourofakind(hand) else
+                 6 if fullhouse(hand) else
+                 5 if flush(hand) else
+                 4 if straight(hand) else
+                 3 if threeofakind(hand) else
+                 2 if twopair(hand) else
+                 1 if onepair(hand) else
+                 0), ranks(hand))
+    def compare(hand1, hand2):
+        return (1 if max((hand1, hand2), key=value) == hand1 else 0)
+    def players(row):
+        return (row[:5], row[5:])
     with open("poker.txt", "r") as f:
         rows = f.readlines()
         return sum(compare(*players(row.split())) for row in rows)
@@ -135,8 +140,9 @@ def problem57():
     denominator?"""
     def check_numerator(frac):
         return number_of_digits(frac.numerator) > number_of_digits(frac.denominator)
-    # The repeating pattern at the end of the expansions
-    tail = lambda x: 2 + Fraction(1, x)
+    def tail(n):
+        "The repeating pattern at the end of the expansions"
+        return 2 + Fraction(1, n)
     # Yields tail(2), tail(tail(2)), tail(tail(tail(2))), ...
     generate_tails = repeatfunc(tail, 2)
     expansions = (1 + Fraction(1, t) for t in generate_tails)
