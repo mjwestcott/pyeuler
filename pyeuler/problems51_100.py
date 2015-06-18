@@ -42,7 +42,7 @@ def problem51():
 def problem52():
     """Find the smallest positive integer, x, such that 2x, 3x, 4x, 5x, and 6x,
     contain the same digits."""
-    multiples = lambda x: (i*x for i in range(2, 7))
+    multiples = lambda x: (i*x for i in range(2, 6+1))
     # Check that all digits in the first number are in the second,
     # and that they have the same number of digits.
     same_digits = lambda n, m: (all(d in digits_from_num(m) for d in digits_from_num(n))
@@ -53,7 +53,7 @@ def problem53():
     """How many, not necessarily distinct, values of nCr, for 1 ≤ n ≤ 100, are
     greater than one-million?"""
     C = lambda n, r: factorial(n) / (factorial(r) * factorial(n - r))
-    return sum(1 for n in range(1, 101)
+    return sum(1 for n in range(1, 100+1)
                  for r in range(1, n+1)
                  if C(n, r) > 1e6)
 
@@ -116,8 +116,7 @@ def problem56():
     what is the maximum digital sum?"""
     def digit_sum(n):
         return sum(digits_from_num(n))
-    return max(digit_sum(a**b) for a in range(100)
-                               for b in range(100))
+    return max(digit_sum(a**b) for a in range(100) for b in range(100))
 
 def problem57():
     """It is possible to show that the square root of two can be
