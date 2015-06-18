@@ -301,7 +301,7 @@ def problem62():
     digits which are also cube. Find the smallest cube for which
     exactly five permutations of its digits are cube."""
     @tail_recursive
-    def process_one(i=0, cubes=collections.defaultdict(list)):
+    def process_cube(i=0, cubes=collections.defaultdict(list)):
         # Add i**3 to a dict, the keys of which are an arbitrarily specified
         # canonical permutation of its digits; the values of which are lists of
         # all cube numbers seen so far which are permutable to the key. Every
@@ -313,5 +313,5 @@ def problem62():
         heapq.heappush(seen, i**3)
         if len(seen) == 5:
             return heapq.heappop(seen)
-        return process_one(i+1, cubes)
-    return process_one()
+        return process_cube(i+1, cubes)
+    return process_cube()
