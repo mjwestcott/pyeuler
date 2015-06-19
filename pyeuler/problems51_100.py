@@ -315,3 +315,17 @@ def problem62():
             return heapq.heappop(seen)
         return process_cube(i+1, cubes)
     return process_cube()
+
+def problem63():
+    """The 5-digit number, 16807=7**5, is also a fifth power. Similarly,
+    the 9-digit number, 134217728=8**9, is a ninth power. How many
+    n-digit positive integers exist which are also an nth power?"""
+    def find_powers(n):
+        """Return the list of powers to which one can raise n such that
+        the result of exponentiation is an integer with number_of_digits == power"""
+        # find_powers(6) --> [1, 2, 3, 4]
+        return takewhile(lambda x: number_of_digits(n**x) == x, count(1))
+    # Take results from find_powers(i) for i in count(1) until the emtpy list
+    # indicates no more results. Find the length of all items of every resulting list.
+    res = takewhile(lambda x: x != [], ([x for x in find_powers(i)] for i in count(1)))
+    return ilen(flatten(res))
