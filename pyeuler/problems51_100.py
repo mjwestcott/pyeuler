@@ -306,13 +306,12 @@ def problem62():
         # canonical permutation of its digits; the values of which are lists of
         # all cube numbers seen so far which are permutable to the key. Every
         # iteration we check whether the list under the current key contains
-        # five members, and if so return the smallest member using the heap
-        # queue algorithm.
+        # five members, and if so return the smallest member.
         canonical = ''.join(sorted(str(i**3)))
         seen = cubes[canonical]
-        heapq.heappush(seen, i**3)
+        seen.append(i**3)
         if len(seen) == 5:
-            return heapq.heappop(seen)
+            return min(seen)
         return process_cube(i+1, cubes)
     return process_cube()
 
