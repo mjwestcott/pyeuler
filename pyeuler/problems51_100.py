@@ -274,13 +274,17 @@ def problem61():
     @memoize
     def is_cyclic(x, y):
         return digits_from_num(x)[2:] == digits_from_num(y)[:2]
-    def make_poly(*polygons):
+    def is_fourdigit(n):
+        return number_of_digits(n) == 4
+    def make_fourdigit_polygons(*poly_funcs):
         """Return list of lists, each holding only four digit numbers
-        of each polygonal type"""
-        is_four = lambda n: number_of_digits(n) == 4
-        poly_gen = lambda poly: (int(poly(i)) for i in range(1, 200)) # 200 is enough
-        return [list(filter(is_four, poly_gen(poly))) for poly in polygons]
-    polys = make_poly(triangle, square, pentagonal, hexagonal, heptagonal, octagonal)
+        of each given polygonal type."""
+        # The polygonal type is represented as a function of n, which returns
+        # the nth polygonal number. e.g. square(2) == 4, pentagonal(3) == 12
+        poly_gen = lambda f: (f(i) for i in range(1, 200)) # 200 is enough
+        return [list(filter(is_fourdigit, poly_gen(func))) for func in poly_funcs]
+    polys = make_fourdigit_polygons(triangle, square, pentagonal,
+                                    hexagonal, heptagonal, octagonal)
     perms = permutations(range(6))
     def check_one(perm):
         return first_true(
