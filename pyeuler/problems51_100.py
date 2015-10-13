@@ -234,7 +234,7 @@ def problem60():
                                       and x > max(candidates))]
     def primes_less_than(n):
         return persistent(takewhile(lambda x: x < n, get_primes()))
-    # Its not clear how many prime numbers to search through.
+    # It's not clear how many prime numbers to search through.
     # Running first_true(find_candidate(n) for n in count(start=0, step=1000))
     # suggests 9000.
     def find_candidate(largest_prime=9000):
@@ -328,7 +328,7 @@ def problem63():
         the result of exponentiation is an integer with number_of_digits == power"""
         # find_powers(6) --> [1, 2, 3, 4]
         return takewhile(lambda x: number_of_digits(n**x) == x, count(1))
-    # Take results from find_powers(i) for i in count(1) until the emtpy list
+    # Take results from find_powers(i) for i in count(1) until the empty list
     # indicates no more results. Find the length of all items of every resulting list.
     res = takewhile(lambda x: x != [], ([x for x in find_powers(i)] for i in count(1)))
     return ilen(flatten(res))
@@ -357,14 +357,14 @@ def problem64():
             seen.append([m, d, a]) # The algortihm terminates when [m, d, a] repeats
             m = (d * a) - m
             d = (S - m**2) / d
-            if d == 0: # S is a perfect square
+            if d == 0: # S is a perfect square.
                 return [a]
             a = floor((floor(sqrt(S)) + m) / d)
             if [m, d, a] in seen:
-                return [x[2] for x in seen] # the third element is the variable 'a' we want
+                return [x[2] for x in seen] # The third element is the variable 'a' we want.
             return process_cf(m, d, a)
         return process_cf()
     continued_fractions = (continued_fraction_sqrt(i) for i in range(2, 10000+1))
-    odd_period = lambda x: len(x) % 2 == 0 # the first element is not part of the period
+    odd_period = lambda x: len(x) % 2 == 0 # The first element is not part of the period.
     return quantify(continued_fractions, pred=odd_period)
 
