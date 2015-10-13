@@ -3,7 +3,7 @@ import collections
 import heapq
 import operator
 
-from math import sqrt, log, log10, ceil
+from math import sqrt, log, log10, ceil, floor
 from fractions import Fraction
 from functools import reduce, partial
 from itertools import (accumulate, chain, combinations,
