@@ -396,8 +396,8 @@ def problem65():
         return Fraction(2 + Fraction(1, tail(values)))
     def tail(values):
         "Recursively returns the tail end of the continued fractional representation of e"
-        if len(values) == 1:
-            return values.popleft()
         next = values.popleft()
+        if len(values) == 0:
+            return next
         return next + Fraction(1, tail(values))
     return sum(digits_from_num(e(100).numerator))
