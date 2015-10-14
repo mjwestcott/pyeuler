@@ -362,7 +362,7 @@ def problem64():
             a = floor((floor(sqrt(S)) + m) / d)
             if [m, d, a] in seen:
                 return [x[2] for x in seen] # The third element is the variable 'a' we want.
-            return process_cf(m, d, a)
+            return process_cf(m, d, a, seen)
         return process_cf()
     continued_fractions = (continued_fraction_sqrt(i) for i in range(2, 10000+1))
     odd_period = lambda x: len(x) % 2 == 0 # The first element is not part of the period.
