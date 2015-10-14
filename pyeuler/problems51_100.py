@@ -368,3 +368,36 @@ def problem64():
     odd_period = lambda x: len(x) % 2 == 0 # The first element is not part of the period.
     return quantify(continued_fractions, pred=odd_period)
 
+def problem65():
+    """What is most surprising is that the important mathematical constant,
+    e = [2; 1,2,1, 1,4,1, 1,6,1 , ... , 1,2k,1, ...].
+
+    The first ten terms in the sequence of convergents for e are:
+
+    2, 3, 8/3, 11/4, 19/7, 87/32, 106/39, 193/71, 1264/465, 1457/536, ...
+    The sum of digits in the numerator of the 10th convergent is 1+4+5+7=17.
+
+    Find the sum of digits in the numerator of the 100th convergent of the
+    continued fraction for e."""
+    def partial_values():
+        "Yields the sequence 1,2,1, 1,4,1, 1,6,1, 1,8,1, ..."
+        # This is the pattern in the continued fractional representation of e.
+        x = 2
+        while True:
+            yield 1; yield x; yield 1
+            x += 2
+    def e(n):
+        "Returns the nth convergent of the continued fraction for e."
+        if n == 1: # The 1st convergent is simply 2.
+            return 2
+        # Collect the first n-1 partial values of e.
+        values = collections.deque(take(n-1, partial_values()))
+        # Construct the continued fraction, where 'tail' is the recursive component.
+        return Fraction(2 + Fraction(1, tail(values)))
+    def tail(values):
+        "Recursively returns the tail end of the continued fractional representation of e"
+        if len(values) == 1:
+            return values.popleft()
+        next = values.popleft()
+        return next + Fraction(1, tail(values))
+    return sum(digits_from_num(e(100).numerator))
