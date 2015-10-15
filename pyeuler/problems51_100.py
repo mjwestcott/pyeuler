@@ -470,7 +470,7 @@ def problem67():
         def largest_route(triangle):
             """Recursively find the maximum value of the root node plus the
             largest of its children, and so on, all the way to the base."""
-            # where triangle is a list of lists such as [[1], [2, 3], [4, 5, 6]
+            # where triangle is a list of lists such as [[1], [2, 3], [4, 5, 6]]
             # representing a tree of the form:
             #   1
             #  2 3
