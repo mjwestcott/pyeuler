@@ -401,3 +401,60 @@ def problem65():
             return next
         return next + Fraction(1, tail(values))
     return sum(digits_from_num(e(100).numerator))
+
+def problem66():
+    """Consider quadratic Diophantine equations of the form: x**2 – Dy**2 = 1
+    For example, when D=13, the minimal solution in x is 6492 – 13×1802 = 1.
+
+    It can be assumed that there are no solutions in positive integers when D is square.
+    By finding minimal solutions in x for D = {2, 3, 5, 6, 7}, we obtain the following:
+
+    32 – 2×22 = 1
+    22 – 3×12 = 1
+    92 – 5×42 = 1
+    52 – 6×22 = 1
+    82 – 7×32 = 1
+
+    Hence, by considering minimal solutions in x for D ≤ 7, the largest x is obtained when D=5.
+    Find the value of D ≤ 1000 in minimal solutions of x for which the largest
+    value of x is obtained."""
+    def solve_pells_equation(D):
+        # Each iteration through the convergents of the continued fraction of
+        # sqrt(D), we want to check whether the numerator and denominator
+        # provide a solution to the Diophantine equation:
+        # https://en.wikipedia.org/wiki/Pell%27s_equation
+        # See the section entitled 'Fundamental solution via continued fractions'
+        def process_cf(m=0, d=1, a=floor(sqrt(D))):
+            while True:
+                yield a
+                m = (d * a) - m
+                d = (D - m**2) / d
+                a = floor((floor(sqrt(D)) + m) / d)
+        def convergent(n):
+            """Returns the nth convergent of the continued fraction for D,
+            where D is a non-square positive integer."""
+            if n == 1:
+                return next(process_cf())
+            # Collect the first n partial values of e.
+            values = collections.deque(take(n, process_cf()))
+            # Construct the continued fraction, where 'tail' is the recursive component.
+            return Fraction(values.popleft() + Fraction(1, tail(values)))
+        def tail(values):
+            "Recursively returns the tail end of the continued fraction for D"
+            next = values.popleft()
+            if len(values) == 0:
+                return next
+            return next + Fraction(1, tail(values))
+        def is_solution(frac):
+            "Check whether the convergent satisfies the Diophantine equation"
+            x, y = frac.numerator, frac.denominator
+            return x**2 - D*(y**2) == 1
+        # Find the solution with the minimal value of x satisfying the equation.
+        solution = (first_true((convergent(n) for n in count(1)), pred=is_solution))
+        # For the purpose of problem 66, we only need the value of x
+        return solution.numerator
+    solutions = [(i, solve_pells_equation(i)) for i in range(1, 1000+1) if sqrt(i).is_integer() == False]
+    # Find the solution wth the largest value of x
+    answer = max(solutions, key=lambda s: s[1])
+    # Return the value of D for which that value of x was obtained
+    return answer[0]
