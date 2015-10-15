@@ -452,7 +452,7 @@ def problem66():
             x, y = frac.numerator, frac.denominator
             return x**2 - D*(y**2) == 1
         # Find the solution with the minimal value of x satisfying the equation.
-        solution = (first_true((convergent(n) for n in count(1)), pred=is_solution))
+        solution = first_true((convergent(n) for n in count(1)), pred=is_solution)
         # For the purpose of problem 66, we only need the value of x
         return solution.numerator
     solutions = [(i, solve_pells_equation(i)) for i in range(1, 1000+1) if sqrt(i).is_integer() == False]
