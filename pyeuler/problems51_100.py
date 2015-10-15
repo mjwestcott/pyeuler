@@ -425,13 +425,15 @@ def problem66():
         # https://en.wikipedia.org/wiki/Pell%27s_equation
         # See the section entitled 'Fundamental solution via continued fractions'
         def process_cf(m=0, d=1, a=floor(sqrt(D))):
+            # See problem 64 for a link explaining this algorithm. Here we use 'D'
+            # in place of 'S' to be consistent with the wording of the question.
             while True:
                 yield a
                 m = (d * a) - m
                 d = (D - m**2) / d
                 a = floor((floor(sqrt(D)) + m) / d)
         def convergent(n):
-            """Returns the nth convergent of the continued fraction for D,
+            """Returns the nth convergent of the continued fraction for sqrt(D),
             where D is a non-square positive integer."""
             if n == 1:
                 return next(process_cf())
@@ -440,7 +442,7 @@ def problem66():
             # Construct the continued fraction, where 'tail' is the recursive component.
             return Fraction(values.popleft() + Fraction(1, tail(values)))
         def tail(values):
-            "Recursively returns the tail end of the continued fraction for D"
+            "Recursively returns the tail end of the continued fraction for sqrt(D)"
             next = values.popleft()
             if len(values) == 0:
                 return next
