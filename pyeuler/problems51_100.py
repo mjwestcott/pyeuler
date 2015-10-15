@@ -435,7 +435,7 @@ def problem66():
             where D is a non-square positive integer."""
             if n == 1:
                 return next(process_cf())
-            # Collect the first n partial values of e.
+            # Collect the first n partial values of D.
             values = collections.deque(take(n, process_cf()))
             # Construct the continued fraction, where 'tail' is the recursive component.
             return Fraction(values.popleft() + Fraction(1, tail(values)))
