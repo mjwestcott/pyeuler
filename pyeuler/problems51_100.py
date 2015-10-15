@@ -460,3 +460,31 @@ def problem66():
     answer = max(solutions, key=lambda s: s[1])
     # Return the value of D for which that value of x was obtained
     return answer[0]
+
+def problem67():
+    """Find the maximum total from top to bottom in triangle.txt a 15K text
+    file containing a triangle with one-hundred rows."""
+    with open("triangle.txt", "r") as f:
+        triangle = [list(map(int, row.split())) for row in f]
+        @memoize_mutable
+        def largest_route(triangle):
+            """Recursively find the maximum value of the root node plus the
+            largest of its children, and so on, all the way to the base."""
+            # where triangle is a list of lists such as [[1], [2, 3], [4, 5, 6]
+            # representing a tree of the form:
+            #   1
+            #  2 3
+            # 4 5 6
+            root = triangle[0][0]
+            if len(triangle) == 1:
+                return root
+            a, b = child_triangles(triangle)
+            return root + max(largest_route(a), largest_route(b))
+        def child_triangles(triangle):
+            "Split the triangle in two below the root node"
+            # [[1], [2, 3], [4, 5, 6]] --> [[2], [4, 5]], [[3], [5, 6]]
+            # the two children triangles of the root node.
+            a = [row[:-1] for row in triangle[1:]]
+            b = [row[1:] for row in triangle[1:]]
+            return a, b
+        return largest_route(triangle)
