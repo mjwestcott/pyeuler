@@ -488,3 +488,35 @@ def problem67():
             b = [row[1:] for row in triangle[1:]]
             return a, b
         return largest_route(triangle)
+
+def problem68():
+    """What is the maximum 16-digit string for a 'magic' 5-gon ring?"""
+    def five_gon_rings(n):
+        """Return list of solutions to the 'magic' 5-gon ring problem.
+        The empty list will be returned if there are no solutions."""
+        rings = [([a, b, c], [d, c, e], [f, e, g], [h, g, i], [j, i, b])
+                 for a in range(1, 10+1)
+                 for b in range(1, 10+1) if b != a
+                 for c in range(1, 10+1) if c not in [a, b]
+                 if a + b + c == n
+                 for d in range(1, 10+1) if d not in [a, b, c]
+                 for e in range(1, 10+1) if e not in [a, b, c, d]
+                 if d + c + e == n
+                 for f in range(1, 10+1) if f not in [a, b, c, d, e]
+                 for g in range(1, 10+1) if g not in [a, b, c, d, e, f]
+                 if f + e + g == n
+                 for h in range(1, 10+1) if h not in [a, b, c, d, e, f, g]
+                 for i in range(1, 10+1) if i not in [a, b, c, d, e, f, g, h]
+                 if h + g + i == n
+                 for j in range(1, 10+1) if j not in [a, b, c, d, e, f, g, h, i]
+                 if j + i + b == n
+                 if a < min(d, f, h, j)]
+        # Each solution can be described uniquely starting from the group of three
+        # with the numerically lowest external node and working clockwise.
+        # So we specified at the end that a < min(d, f, h, j)
+        return rings
+    # Collect solution candidates, filtering for empty lists, flattening into one array of solutions.
+    rings = compact(flatten(list(five_gon_rings(n) for n in range(6, 55))))
+    # Transform each solution tuple into a string of digits.
+    rings = [''.join(str(x) for x in flatten(solution)) for solution in rings]
+    return max(solution for solution in rings if len(solution) == 16)
