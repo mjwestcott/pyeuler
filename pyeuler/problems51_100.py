@@ -592,3 +592,12 @@ def problem71():
             return left.numerator
         return process_farey_term(left=med)
     return process_farey_term()
+
+def problem72():
+    """How many elements would be contained in the set of reduced proper
+    fractions for d ≤ 1,000,000?"""
+    # As above, see https://en.wikipedia.org/wiki/Farey_sequence
+    def phi(n):
+        ps = list(unique(prime_factors(n)))
+        return int(n * reduce(operator.mul, (1 - Fraction(1, p) for p in ps)))
+    return sum(phi(n) for n in range(1, 1000000+1))
