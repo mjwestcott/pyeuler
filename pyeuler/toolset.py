@@ -328,6 +328,12 @@ def is_pandigital(digits, through=range(1, 10)):
     """Return True if digits form a pandigital number"""
     return (sorted(digits) == list(through))
 
+def phi(n):
+    """Euler's phi function (also known as Euler's totient function) counts the
+    positive integers less than or equal to n that are relatively prime to n."""
+    ps = list(unique(prime_factors(n)))
+    return int(n * reduce(operator.mul, (1 - Fraction(1, p) for p in ps)))
+
 # Decorators
 
 def memoize(f, maxcache=None, cache={}):

@@ -559,9 +559,6 @@ def problem70():
     # cannot simply be prime because in that case phi(n) == n-1 which is not a
     # permutation of n. Therefore, the best candidates should have two unique
     # prime factors.
-    def phi(n):
-        ps = list(unique(prime_factors(n)))
-        return n * reduce(operator.mul, (1 - Fraction(1, p) for p in ps))
     def is_permutation(x, y):
         return sorted(str(x)) == sorted(str(y))
     # Since we are seeking large values for both prime factors, we can search
@@ -597,7 +594,4 @@ def problem72():
     """How many elements would be contained in the set of reduced proper
     fractions for d ≤ 1,000,000?"""
     # As above, see https://en.wikipedia.org/wiki/Farey_sequence
-    def phi(n):
-        ps = list(unique(prime_factors(n)))
-        return int(n * reduce(operator.mul, (1 - Fraction(1, p) for p in ps)))
     return sum(phi(n) for n in range(1, 1000000+1))
