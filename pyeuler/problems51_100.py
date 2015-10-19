@@ -547,3 +547,28 @@ def problem69():
             yield x
             x *= next(primes)
     return max(takewhile(lambda x: x < 1e6, candidates()))
+
+def problem70():
+    """Interestingly, φ(87109)=79180, and it can be seen that 87109 is a
+    permutation of 79180. Find the value of n, 1 < n < 10**7, for which φ(n) is
+    a permutation of n and the ratio n/φ(n) produces a minimum."""
+    # The search space is too large for brute-force. So, note that we are
+    # seeking roughly the inverse of the previous problem -- to minimize
+    # n/phi(n). Therefore, we want to maximize phi(n), which is acheived for
+    # numbers with the fewest and largest unique prime factors. But the number
+    # cannot simply be prime because in that case phi(n) == n-1 which is not a
+    # permutation of n. Therefore, the best candidates should have two unique
+    # prime factors.
+    def phi(n):
+        ps = list(unique(prime_factors(n)))
+        return n * reduce(operator.mul, (1 - Fraction(1, p) for p in ps))
+    def is_permutation(x, y):
+        return sorted(str(x)) == sorted(str(y))
+    # Since we are seeking large values for both prime factors, we can search
+    # among numbers close to the value of sqrt(1e7) ~ 3162
+    ps = list(takewhile(lambda x: x < 4000, get_primes(start=2000)))
+    ns = [x*y for x in ps
+              for y in ps
+              if x != y and x*y < 1e7]
+    candidates = [n for n in ns if is_permutation(n, phi(n))]
+    return min(candidates, key=lambda n: n/phi(n))
