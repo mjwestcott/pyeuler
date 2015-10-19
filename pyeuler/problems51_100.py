@@ -45,10 +45,7 @@ def problem52():
     def multiples(x):
         return [i*x for i in range(2, 6+1)]
     def same_digits(x, y):
-        """Check that all digits in the first number are in the second,
-        and that they have the same number of digits."""
-        return (all(d in digits_from_num(y) for d in digits_from_num(x))
-                and number_of_digits(x) == number_of_digits(y))
+        return sorted(str(x)) == sorted(str(y))
     return first(x for x in count(1) if all(same_digits(x, y) for y in multiples(x)))
 
 def problem53():
