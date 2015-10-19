@@ -516,7 +516,7 @@ def problem68():
     rings = compact(flatten(list(five_gon_rings(n) for n in range(6, 55))))
     # Transform each solution tuple into a string of digits.
     rings = [''.join(str(x) for x in flatten(solution)) for solution in rings]
-    return max(solution for solution in rings if len(solution) == 16)
+    return int(max(solution for solution in rings if len(solution) == 16))
 
 def problem69():
     """Euler's Totient function, φ(n) [sometimes called the phi function], is
