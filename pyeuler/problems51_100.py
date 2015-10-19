@@ -572,3 +572,23 @@ def problem70():
               if x != y and x*y < 1e7]
     candidates = [n for n in ns if is_permutation(n, phi(n))]
     return min(candidates, key=lambda n: n/phi(n))
+
+def problem71():
+    """By listing the set of reduced proper fractions for d ≤ 1,000,000 in
+    ascending order of size, find the numerator of the fraction immediately to
+    the left of 3/7."""
+    # https://en.wikipedia.org/wiki/Farey_sequence
+    # The value of the new term in between neighbours 2/5 and 3/7 is found
+    # by computing the mediant of those neighbours. We can take result
+    # to be the next left-hand neighbour of 3/7 iteratively until the denominator
+    # reaches 1e6.
+    def mediant(a, b):
+        # mediant(Fraction(2, 5), Fraction(3, 7)) --> Fraction(5, 12)
+        return Fraction(a.numerator + b.numerator, a.denominator + b.denominator)
+    @tail_recursive
+    def process_farey_term(left=Fraction(2, 5), right=Fraction(3, 7)):
+        med = mediant(left, right)
+        if med.denominator > 1e6:
+            return left.numerator
+        return process_farey_term(left=med)
+    return process_farey_term()
