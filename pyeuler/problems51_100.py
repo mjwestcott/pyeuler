@@ -594,4 +594,5 @@ def problem72():
     """How many elements would be contained in the set of reduced proper
     fractions for d ≤ 1,000,000?"""
     # As above, see https://en.wikipedia.org/wiki/Farey_sequence
+    # This solution is slower than 1-minute, should revisit.
     return sum(phi(n) for n in range(1, 1000000+1))
