@@ -596,3 +596,11 @@ def problem72():
     # As above, see https://en.wikipedia.org/wiki/Farey_sequence
     # This solution is slower than 1-minute, should revisit.
     return sum(phi(n) for n in range(1, 1000000+1))
+
+def problem73():
+    """How many fractions lie between 1/3 and 1/2 in the sorted set of reduced
+    proper fractions for d ≤ 12,000?"""
+    return sum(1 for d in range(1, 12000+1)
+                 for n in range(1, d)
+                 if (1/3 < n/d < 1/2)
+                 and greatest_common_divisor(n, d) == 1)
