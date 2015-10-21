@@ -674,28 +674,31 @@ def problem75():
     can exactly one integer sided right angle triangle be formed?"""
     # A mapping from values of L to the number of right-angled triangles with the perimeter L
     triangles = collections.Counter()
-    def children(a, b, c):
+    def children(triple):
         """Given a pythagorean triple, return its three children triples"""
         # See Berggren's ternary tree, which will produce all infinitely many
         # primitive triples without duplication.
+        a, b, c = triple
         a1, b1, c1 = (-a + 2*b + 2*c), (-2*a + b + 2*c), (-2*a + 2*b + 3*c)
         a2, b2, c2 = (+a + 2*b + 2*c), (+2*a + b + 2*c), (+2*a + 2*b + 3*c)
         a3, b3, c3 = (+a - 2*b + 2*c), (+2*a - b + 2*c), (+2*a - 2*b + 3*c)
         return (a1, b1, c1), (a2, b2, c2), (a3, b3, c3)
-    def process_all_triples(a=3, b=4, c=5, limit=1500000):
-        """Update the 'triangles' counter for the given pythagorean triple, and
-        all its multiples whose perimeter is less than the limit.
+    def process_all_triples(triple=(3, 4, 5), limit=1500000):
+        """Starting with the first pythagorean triple, update the 'triangles'
+        counter, and do so for all the triple's multiples whose perimeter is less than
+        the limit.
 
         Recursively process all the given triple's children until the perimeter
         value of all children exceeds the limit."""
-        L = a + b + c
+        a, b, c = triple
+        L = sum(triple)
         if L > limit:
             return
         triangles[L] += 1
         multiples = takewhile(lambda m: sum(m) < limit, ((i*a, i*b, i*c) for i in count(2)))
         for m in multiples:
             triangles[sum(m)] += 1
-        for (x, y, z) in children(a, b, c):
-            process_all_triples(x, y, z)
+        for child in children(triple):
+            process_all_triples(child)
     process_all_triples()
     return sum(triangles[L] == 1 for L in triangles)
