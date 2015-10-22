@@ -709,19 +709,19 @@ def problem76():
     # I found this much easier to understand as 'change-giving' (as in problem number 31).
     # Solving num_partitions(n=100, k=99) means solving the number of ways to give change
     # to 100 using values in the set {1, 2, 3, ..., 99}. This can be broken down into
-    # sub-problems recursively, as the answer is the sum of the ways to give change
-    # to (n-1) = 99, since we can start by using 1
-    #    (n-2) = 98, since we can start by using 2
+    # sub-problems, as the answer is the sum of the ways to give change
+    # to 99, i.e. n-1, since we can start by using 1
+    #    98, i.e. n-2, since we can start by using 2
     #    ...
-    #    (n-99) = 1, since we can start by using 99
-    # But simply summing all those ways to give change will over-count many solutions.
-    # For instance, 5 = 3 + 1 + 1 is the same as 5 = 1 + 1 + 3. So we need to
-    # determine a canonical way to give change. This can be achieved by
-    # specifying that having used a coin of value x as the first step, we can
-    # only use coins of value <= x from then on.
-    # So, the solution to (n-1) = 99 can use only {1}
-    #                     (n-2) = 98 can use values in the set {1, 2}
-    #                     (n-3) = 97 can use values in the set {1, 2, 3}, etc.
+    #    1, i.e. n-99, since we can start by using 99
+    # But simply recursively summing all those ways to give change will
+    # over-count many solutions. For instance, 5 = 3 + 1 + 1 is the same
+    # as 5 = 1 + 1 + 3. So we need to determine a canonical way to give change.
+    # This can be achieved by specifying that having used a coin of value x as
+    # the first step, we can only use coins of value <= x from then on.
+    # So, the solution to 99, i.e. n-1, can use only {1}
+    #                     98, i.e. n-2, can use values in the set {1, 2}
+    #                     97, i.e. n-3, can use values in the set {1, 2, 3}, etc.
     # This is how we arrive at sum(num_partitions(n-x, x) for x in range(1, k+1)) below.
     @memoize
     def num_partitions(n, k):
