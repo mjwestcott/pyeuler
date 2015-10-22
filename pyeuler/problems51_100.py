@@ -740,19 +740,22 @@ def problem76():
             return sum(num_partitions(n-x, x) for x in range(1, k+1))
     return num_partitions(100, 99)
 
-# I found problem 76 incredibly interesting, so here is another solution using
-# the logic from SICP: https://mitpress.mit.edu/sicp/full-text/book/book-Z-H-11.html
-# See the section entitled 'Example: Counting change'. It was interesting to
-# reflect on why the two solutions are equivalent.
-# def problem76():
-#    @memoize
-#    def num_partitions(n, k):
-#        if n < 0:
-#            return 0
-#        elif n == 0:
-#            return 1
-#        elif k == 0:
-#            return 0
-#        else:
-#            return num_partitions(n, k-1) + num_partitions(n-k, k)
-#    return num_partitions(100, 99)
+def problem77():
+    """What is the first value which can be written as the sum of primes in
+    over five thousand different ways?"""
+    @memoize_mutable
+    def num_partitions(n, primes):
+        # Using a slightly different algorithm than problem 76.
+        # This one is adapted from SICP: https://mitpress.mit.edu/sicp/full-text/book/book-Z-H-11.html
+        # See the section entitled 'Example: Counting change'. Their logic is
+        # more intuitive than that which I presented in the previous problem.
+        if n < 0:
+            return 0
+        elif n == 0:
+            return 1
+        elif primes == []:
+            return 0
+        else:
+            return num_partitions(n, primes[1:]) + num_partitions(n - primes[0], primes)
+    primes = list(takewhile(lambda x: x < 100, get_primes()))
+    return first_true(count(2), pred=lambda x: num_partitions(x, primes) > 5000)
