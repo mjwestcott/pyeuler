@@ -702,3 +702,57 @@ def problem75():
             process_all_triples(child)
     process_all_triples()
     return sum(triangles[L] == 1 for L in triangles)
+
+def problem76():
+    """How many different ways can one hundred be written as a sum of at least two
+    positive integers?"""
+    # I found this much easier to understand as 'change-giving' (as in problem number 31).
+    # Solving num_partitions(n=100, k=99) means solving the number of ways to give change
+    # to 100 using values in the set {1, 2, 3, ..., 99}. This can be broken down into
+    # sub-problems recursively, as the answer is the sum of the ways to give change
+    # to (n-1) = 99, since we can start by using 1
+    #    (n-2) = 98, since we can start by using 2
+    #    ...
+    #    (n-99) = 1, since we can start by using 99
+    # But simply summing all those ways to give change will over-count many solutions.
+    # For instance, 5 = 3 + 1 + 1 is the same as 5 = 1 + 1 + 3. So we need to
+    # determine a canonical way to give change. This can be achieved by
+    # specifying that having used a coin of value x as the first step, we can
+    # only use coins of value <= x from then on.
+    # So, the solution to (n-1) = 99 can use only {1}
+    #                     (n-2) = 98 can use values in the set {1, 2}
+    #                     (n-3) = 97 can use values in the set {1, 2, 3}, etc.
+    # This is how we arrive at sum(num_partitions(n-x, x) for x in range(1, k+1)) below.
+    @memoize
+    def num_partitions(n, k):
+        """Return the number of partitions of n, using positive integers <= k"""
+        if n < 0:
+            # This will occur after an attempt to give change for n, with a coin
+            # greater than n, and indicates the failure of change-giving.
+            return 0
+        elif n == 0:
+            # This will occur after an attempt to give change for n, with a coin
+            # of value exactly n, and indicates the change-giving was successful.
+            return 1
+        else:
+            # For all possible coin-values, x, find the ways to give change to
+            # (n-x) using coins <= x.
+            return sum(num_partitions(n-x, x) for x in range(1, k+1))
+    return num_partitions(100, 99)
+
+# I found problem 76 incredibly interesting, so here is another solution using
+# the logic from SICP: https://mitpress.mit.edu/sicp/full-text/book/book-Z-H-11.html
+# See the section entitled 'Example: Counting change'. It was interesting to
+# reflect on why the two solutions are equivalent.
+# def problem76():
+#    @memoize
+#    def num_partitions(n, k):
+#        if n < 0:
+#            return 0
+#        elif n == 0:
+#            return 1
+#        elif k == 0:
+#            return 0
+#        else:
+#            return num_partitions(n, k-1) + num_partitions(n-k, k)
+#    return num_partitions(100, 99)
