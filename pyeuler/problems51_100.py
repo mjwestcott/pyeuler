@@ -759,3 +759,40 @@ def problem77():
             return num_partitions(n, primes[1:]) + num_partitions(n - primes[0], primes)
     primes = list(takewhile(lambda x: x < 100, get_primes()))
     return first_true(count(2), pred=lambda x: num_partitions(x, primes) > 5000)
+
+def problem78():
+    """Let p(n) represent the number of different ways in which n coins can be
+    separated into piles. For example, five coins can be separated into piles
+    in exactly seven different ways, so p(5)=7.
+
+         OOOOO
+        OOOO   O
+        OOO   OO
+      OOO   O   O
+      OO   OO   O
+     OO   O   O   O
+    O   O   O   O   O
+
+    Find the least value of n for which p(n) is divisible by one million."""
+    # https://en.wikipedia.org/wiki/Pentagonal_number_theorem
+    def generalised_pentagonals():
+        x = 0
+        while True:
+            x += 1
+            yield pentagonal(x); yield pentagonal(-x)
+    def coefficients():
+        while True:
+            yield 1; yield 1; yield -1; yield -1
+    @memoize
+    def p(n):
+        if n < 0:
+            return 0
+        elif n == 0:
+            return 1
+        else:
+            # Generating pentagonals is repeated many times, should think about optimising this.
+            pentagonals = list(takewhile(lambda x: x <= n, generalised_pentagonals()))
+            terms = [p(n - x) for x in pentagonals]
+            coefs = list(take(len(terms), coefficients()))
+            return sum(a*b for (a, b) in zip(terms, coefs))
+    return first_true(count(2), pred=lambda x: p(x) % 1000000 == 0)
