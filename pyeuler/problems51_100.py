@@ -796,3 +796,33 @@ def problem78():
             coefs = list(take(len(terms), coefficients()))
             return sum(a*b for (a, b) in zip(terms, coefs))
     return first_true(count(2), pred=lambda x: p(x) % 1000000 == 0)
+
+def problem79():
+    """A common security method used for online banking is to ask the user for
+    three random characters from a passcode. For example, if the passcode was
+    531278, they may ask for the 2nd, 3rd, and 5th characters; the expected
+    reply would be: 317.
+
+    The text file, keylog.txt, contains fifty successful login attempts.
+
+    Given that the three characters are always asked for in order, analyse the file
+    so as to determine the shortest possible secret passcode of unknown length."""
+    with open("keylog.txt", "r") as f:
+        codes = [int(x) for x in f.readlines()]
+        before = collections.defaultdict(set)
+        for code in codes:
+            x, y, z = digits_from_num_fast(code)
+            before[z].add(y); before[z].add(x); before[y].add(x)
+        vals = list(range(10))
+        # Should think about a version that generates all candidates at a given
+        # starting length before adding another digit, ad infinitum.
+        candidates = ([a, b, c, d, e, f, g, h]
+                      for a in vals
+                      for b in vals if a in before[b]
+                      for c in vals if all(x in before[c] for x in [a, b])
+                      for d in vals if all(x in before[d] for x in [a, b, c])
+                      for e in vals if all(x in before[e] for x in [a, b, c, d])
+                      for f in vals if all(x in before[f] for x in [a, b, c, d, e])
+                      for g in vals if all(x in before[g] for x in [a, b, c, d, e, f])
+                      for h in vals if all(x in before[h] for x in [a, b, c, d, e, f, g]))
+        return num_from_digits(next(candidates))
