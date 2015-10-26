@@ -100,7 +100,7 @@ def problem54():
         return (row[:5], row[5:])
     with open("poker.txt", "r") as f:
         rows = f.readlines()
-        return sum(compare(*players(row.split())) for row in rows)
+    return sum(compare(*players(row.split())) for row in rows)
 
 def problem55():
     """If we take 47, reverse and add, 47 + 74 = 121, which is
@@ -207,7 +207,7 @@ def problem59():
         return item ^ ord(' ')
     with open("cipher.txt", "r") as f:
         cipher = [int(x) for x in f.read().split(',')]
-        key = [decrypt(cipher, start=i) for i in range(3)]
+    key = [decrypt(cipher, start=i) for i in range(3)]
     return sum(c ^ k for c, k in zip(cipher, cycle(key)))
 
 def problem60():
@@ -463,28 +463,28 @@ def problem67():
     file containing a triangle with one-hundred rows."""
     with open("triangle.txt", "r") as f:
         triangle = [list(map(int, row.split())) for row in f]
-        @memoize_mutable
-        def largest_route(triangle):
-            """Recursively find the maximum value of the root node plus the
-            largest of its children, and so on, all the way to the base."""
-            # where triangle is a list of lists such as [[1], [2, 3], [4, 5, 6]]
-            # representing a tree of the form:
-            #   1
-            #  2 3
-            # 4 5 6
-            root = triangle[0][0]
-            if len(triangle) == 1:
-                return root
-            a, b = child_triangles(triangle)
-            return root + max(largest_route(a), largest_route(b))
-        def child_triangles(triangle):
-            "Split the triangle in two below the root node"
-            # [[1], [2, 3], [4, 5, 6]] --> [[2], [4, 5]], [[3], [5, 6]]
-            # the two children triangles of the root node.
-            a = [row[:-1] for row in triangle[1:]]
-            b = [row[1:] for row in triangle[1:]]
-            return a, b
-        return largest_route(triangle)
+    @memoize_mutable
+    def largest_route(triangle):
+        """Recursively find the maximum value of the root node plus the
+        largest of its children, and so on, all the way to the base."""
+        # where triangle is a list of lists such as [[1], [2, 3], [4, 5, 6]]
+        # representing a tree of the form:
+        #   1
+        #  2 3
+        # 4 5 6
+        root = triangle[0][0]
+        if len(triangle) == 1:
+            return root
+        a, b = child_triangles(triangle)
+        return root + max(largest_route(a), largest_route(b))
+    def child_triangles(triangle):
+        "Split the triangle in two below the root node"
+        # [[1], [2, 3], [4, 5, 6]] --> [[2], [4, 5]], [[3], [5, 6]]
+        # the two children triangles of the root node.
+        a = [row[:-1] for row in triangle[1:]]
+        b = [row[1:] for row in triangle[1:]]
+        return a, b
+    return largest_route(triangle)
 
 def problem68():
     """What is the maximum 16-digit string for a 'magic' 5-gon ring?"""
@@ -809,20 +809,20 @@ def problem79():
     so as to determine the shortest possible secret passcode of unknown length."""
     with open("keylog.txt", "r") as f:
         codes = [int(x) for x in f.readlines()]
-        before = collections.defaultdict(set)
-        for code in codes:
-            x, y, z = digits_from_num_fast(code)
-            before[z].add(y); before[z].add(x); before[y].add(x)
-        vals = list(range(10))
-        # Should think about a version that generates all candidates at a given
-        # starting length before adding another digit, ad infinitum.
-        candidates = ([a, b, c, d, e, f, g, h]
-                      for a in vals
-                      for b in vals if a in before[b]
-                      for c in vals if all(x in before[c] for x in [a, b])
-                      for d in vals if all(x in before[d] for x in [a, b, c])
-                      for e in vals if all(x in before[e] for x in [a, b, c, d])
-                      for f in vals if all(x in before[f] for x in [a, b, c, d, e])
-                      for g in vals if all(x in before[g] for x in [a, b, c, d, e, f])
-                      for h in vals if all(x in before[h] for x in [a, b, c, d, e, f, g]))
-        return num_from_digits(next(candidates))
+    before = collections.defaultdict(set)
+    for code in codes:
+        x, y, z = digits_from_num_fast(code)
+        before[z].add(y); before[z].add(x); before[y].add(x)
+    vals = list(range(10))
+    # Should think about a version that generates all candidates at a given
+    # starting length before adding another digit, ad infinitum.
+    candidates = ([a, b, c, d, e, f, g, h]
+                  for a in vals
+                  for b in vals if a in before[b]
+                  for c in vals if all(x in before[c] for x in [a, b])
+                  for d in vals if all(x in before[d] for x in [a, b, c])
+                  for e in vals if all(x in before[e] for x in [a, b, c, d])
+                  for f in vals if all(x in before[f] for x in [a, b, c, d, e])
+                  for g in vals if all(x in before[g] for x in [a, b, c, d, e, f])
+                  for h in vals if all(x in before[h] for x in [a, b, c, d, e, f, g]))
+    return num_from_digits(next(candidates))
