@@ -814,8 +814,9 @@ def problem79():
         x, y, z = digits_from_num_fast(code)
         before[z].add(y); before[z].add(x); before[y].add(x)
     vals = list(range(10))
-    # Should think about a version that generates all candidates at a given
-    # starting length before adding another digit, ad infinitum.
+    # This solution takes advantage of the fact that there are exactly eight
+    # characters found in the passcode, and that there are no repeating digits
+    # in the shortest solution. I should work on a solution that does not rely on this.
     candidates = ([a, b, c, d, e, f, g, h]
                   for a in vals
                   for b in vals if a in before[b]
