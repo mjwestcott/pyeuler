@@ -809,21 +809,31 @@ def problem79():
     so as to determine the shortest possible secret passcode of unknown length."""
     with open("keylog.txt", "r") as f:
         codes = [int(x) for x in f.readlines()]
-    before = collections.defaultdict(set)
+    after = collections.defaultdict(set)
     for code in codes:
-        x, y, z = digits_from_num_fast(code)
-        before[z].add(y); before[z].add(x); before[y].add(x)
-    vals = list(range(10))
-    # This solution takes advantage of the fact that there are exactly eight
-    # characters found in the passcode, and that there are no repeating digits
-    # in the shortest solution. I should work on a solution that does not rely on this.
-    candidates = ([a, b, c, d, e, f, g, h]
-                  for a in vals
-                  for b in vals if a in before[b]
-                  for c in vals if all(x in before[c] for x in [a, b])
-                  for d in vals if all(x in before[d] for x in [a, b, c])
-                  for e in vals if all(x in before[e] for x in [a, b, c, d])
-                  for f in vals if all(x in before[f] for x in [a, b, c, d, e])
-                  for g in vals if all(x in before[g] for x in [a, b, c, d, e, f])
-                  for h in vals if all(x in before[h] for x in [a, b, c, d, e, f, g]))
-    return num_from_digits(next(candidates))
+        a, b, c = digits_from_num_fast(code)
+        after[a].add(b); after[a].add(c); after[b].add(c); after[c]
+    # Use breadth-first tree search, inspired by Peter Norvig's version in AIMA.
+    def solve():
+        # We will use lists to represent nodes in the tree, each of which is
+        # a candidate solution. So, initialise the frontier to the possible
+        # starting values.
+        frontier = collections.deque([x] for x in after)
+        while frontier:
+            node = frontier.popleft()
+            if satisfies_all_relations(node):
+                return num_from_digits(node)
+            # Use the 'after' dict to find the values, x, reachable from the end of
+            # the current node.
+            for x in after[node[-1]]:
+                child = node + [x]
+                frontier.append(child)
+    def satisfies_all_relations(node):
+        """Check whether, for all the relations specified in the 'after' dict,
+        the node satisfies them."""
+        # For each key, x, in the 'after' dict, the values, y, in after[x] must
+        # exist after the first occurence of x in the node.
+        return all(y in dropwhile(lambda dgt: dgt != x, node)
+                   for x in after
+                   for y in after[x])
+    return solve()
