@@ -821,14 +821,12 @@ def problem79():
         frontier = collections.deque([x] for x in after)
         while frontier:
             node = frontier.popleft()
-            if satisfies_all_relations(node):
-                return num_from_digits(node)
+            if goal_state(node):
+                return node
             # Use the 'after' dict to find the values, x, reachable from the end of
-            # the current node.
-            for x in after[node[-1]]:
-                child = node + [x]
-                frontier.append(child)
-    def satisfies_all_relations(node):
+            # the current node. Child nodes are then node + [x].
+            frontier.extend(node + [x] for x in after[node[-1]])
+    def goal_state(node):
         """Check whether, for all the relations specified in the 'after' dict,
         the node satisfies them."""
         # For each key, x, in the 'after' dict, the values, y, in after[x] must
@@ -836,4 +834,5 @@ def problem79():
         return all(y in dropwhile(lambda dgt: dgt != x, node)
                    for x in after
                    for y in after[x])
-    return solve()
+    solution = solve()
+    return num_from_digits(solution)
