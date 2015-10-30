@@ -849,10 +849,11 @@ def problem80():
     of the first one hundred decimal digits for all the irrational square roots."""
     # Set the precision of decimal arithmetic operations to slightly above 100
     # to ensure that the first 100 digits are correct.
-    import decimal; decimal.getcontext().prec = 102
+    from decimal import Decimal, getcontext
+    getcontext().prec = 102
     def square_root_digits(n):
         "Find the first one hundred decimal digits of the square root of n"
-        return decimal.Decimal(n).sqrt().as_tuple().digits[:-2] # Cut off the last 2 of the 102 digits.
+        return Decimal(n).sqrt().as_tuple().digits[:-2] # Cut off the last 2 of the 102 digits.
     def has_irrational_sqrt(n):
         return sqrt(n).is_integer() == False
     return sum(sum(square_root_digits(n)) for n in range(1, 100) if has_irrational_sqrt(n))
