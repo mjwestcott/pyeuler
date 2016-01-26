@@ -884,7 +884,7 @@ def problem81():
     def successors(node):
         r, c = node
         if r < len(matrix)-1: yield (r+1, c) # down
-        if c < len(matrix)-1: yield (c, y+1) # right
+        if c < len(matrix)-1: yield (r, c+1) # right
     def goal_state(node):
         r, c = node
         return r == c == len(matrix)-1
